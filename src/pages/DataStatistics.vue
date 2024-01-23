@@ -1,8 +1,7 @@
 <template>
-    <Layout></Layout>
+    <h1>数据统计</h1>
 </template>
 <script lang="ts" setup>
-import Layout from "./components/layout/Layout.vue"
 </script>
 
 <style lang="scss" scoped>

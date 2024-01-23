@@ -1,8 +1,10 @@
 <template>
-    <Layout></Layout>
+    <div class="food-manager-card-container">
+        
+    </div>
 </template>
 <script lang="ts" setup>
-import Layout from "./components/layout/Layout.vue"
+
 </script>
 
 <style lang="scss" scoped>
