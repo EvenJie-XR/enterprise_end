@@ -6,6 +6,9 @@
         <div class="sheet-container">
             <slot name="sheet"></slot>
         </div>
+        <div class="pagination-container">
+            <slot name="pagination"></slot>
+        </div>
     </div>
 </template>
 <script lang="ts" setup>
@@ -17,13 +20,18 @@
     background-color: white;
     margin-right: 36px;
     border-radius: 10px;
-    height: 400px;
     .header-container {
-        height: 66px;
+        height: 54px;
     }
     .sheet-container {
-        height: calc(400px - 66px);
+        height: calc(100% - 66px - 35px);
         padding: 0 10px;
+        margin-bottom: 10px;
+    }
+    .pagination-container {
+        height: 35px;
+        display: flex;
+        justify-content: center;
     }
 }
 </style>

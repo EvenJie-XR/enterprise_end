@@ -7,6 +7,7 @@ body,
   margin: 0;
 }
 
+// 覆盖element-plus自带的颜色变量
 :root {
   --el-color-primary: #28A767;
 }

@@ -81,13 +81,13 @@
                     <el-table-column prop="no" label="订单号">
                         <template #header="{ column }">
                             <div class="check-box-of-column">
-                                <el-checkbox v-model="a"/>
+                                <el-checkbox />
                                 {{ column.label }}
                             </div>
                         </template>
                         <template #default="{row}">
                             <div class="check-box-of-column">
-                                <el-checkbox v-model="a"/>
+                                <el-checkbox />
                                 {{ row.no }}
                             </div>
                         </template>
@@ -105,6 +105,9 @@
                         </template>
                     </el-table-column>
                 </Sheet>
+            </template>
+            <template #pagination>
+                <el-pagination background layout="prev, pager, next, sizes, jumper" :total="1000" />
             </template>
         </SheetLayout>
     </div>
@@ -294,6 +297,8 @@ const tableData = ref([
         }
     }
     .sheet-container {
+        height: 400px;
+        margin-bottom: 16px;
         .header-container {
             display: flex;
             align-items: center;
@@ -301,7 +306,7 @@ const tableData = ref([
             height: 100%;
             padding: 0 22px;
             .title {
-                font-size: 26px;
+                font-size: 24px;
                 font-weight: bold;
             }
             .right-tool {

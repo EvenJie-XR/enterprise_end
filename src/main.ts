@@ -6,10 +6,18 @@ import "virtual:svg-icons-register";
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import './style.scss'
+// @ts-ignore 实现element的国际化为中文
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
+// 批量注册element的icons
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }
 
-app.use(router).use(ElementPlus).mount('#app')
+app
+.use(router)
+.use(ElementPlus, { 
+  locale: zhCn, // 设置element的国际化为中文
+})
+.mount('#app')
