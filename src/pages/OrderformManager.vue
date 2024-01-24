@@ -15,7 +15,6 @@
         <OrderContent>
         </OrderContent>
       </div>
-
     </div>
   </div>
 
@@ -42,6 +41,9 @@
       .OrderBar{
         height: 80px;
         border-bottom: 1px solid #B7BFDD;
+      }
+      .OrderContent{
+        margin-top: 10px;
       }
     }
   }

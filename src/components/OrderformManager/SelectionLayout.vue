@@ -1,16 +1,31 @@
 <script setup lang="ts">
+  import {ref, Ref} from "vue";
+  type BarItemType = {
+    label: string
+    active: boolean
+  }
+  const BarList: Ref<BarItemType[]> = ref([
+    {label: "全部订单", active: true},
+    {label: "待接单", active: false},
+    {label: "待派送", active: false},
+    {label: "派送中", active: false},
+    {label: "已完成", active: false},
+    {label: "已取消", active: false},
+  ])
+
+  const handleBarChange = (targetItem: BarItemType) => {
+    BarList.value.forEach((item) => {
+      item.active = false
+    })
+    targetItem.active = true
+  //TODO 更改LabelList
+  }
 
 </script>
 
 <template>
   <div class="SelectBar">
-    <div class="BarText active">全部订单</div>
-    <div class="BarText">待接单</div>
-    <div class="BarText">待派送</div>
-    <div class="BarText">派送中</div>
-    <div class="BarText">已完成</div>
-    <div class="BarText">已取消</div>
-
+    <div v-for="(item, index) in BarList" :key="index" :class="{'BarText': true, 'active': item.active}" @click="handleBarChange(item)"><span>{{item.label}}</span></div>
   </div>
 
 
