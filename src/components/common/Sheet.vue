@@ -1,8 +1,6 @@
 <template>
-    <el-table :data="props.tableData" style="width: 100%">
-        <el-table-column prop="date" label="Date" width="180" />
-        <el-table-column prop="name" label="Name" width="180" />
-        <el-table-column prop="address" label="Address" />
+    <el-table :data="props.tableData" style="width: 100%" class="sheet-container" height="100%">
+        <slot></slot>
     </el-table>
 </template>
 <script lang="ts" setup>
@@ -12,5 +10,16 @@
 </script>
 
 <style lang="scss" scoped>
-//
+.sheet-container {
+    &:deep(thead) {
+        th {
+            background-color: #A9EBC1;
+            color: black;
+            &:nth-child(even) {
+                background-color: #389E79;
+                color: white;
+            }
+        }
+    }
+}
 </style>

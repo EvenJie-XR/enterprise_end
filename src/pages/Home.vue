@@ -77,7 +77,34 @@
             </template>
             <!-- 表格数据 -->
             <template v-slot:sheet>
-                <Sheet></Sheet>
+                <Sheet :table-data="tableData" >
+                    <el-table-column prop="no" label="订单号">
+                        <template #header="{ column }">
+                            <div class="check-box-of-column">
+                                <el-checkbox v-model="a"/>
+                                {{ column.label }}
+                            </div>
+                        </template>
+                        <template #default="{row}">
+                            <div class="check-box-of-column">
+                                <el-checkbox v-model="a"/>
+                                {{ row.no }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="name" label="订单菜品"/>
+                    <el-table-column prop="address" label="地址" />
+                    <el-table-column prop="time" sortable label="预计送达时间" />
+                    <el-table-column prop="money" label="实收金额" width="100" />
+                    <el-table-column prop="notes" label="备注" />
+                    <el-table-column prop="control" label="操作">
+                        <template #default>
+                            <el-button text class="control-btn">接单</el-button>
+                            <el-button text class="control-btn">拒单</el-button>
+                            <el-button text class="control-btn">查看</el-button>
+                        </template>
+                    </el-table-column>
+                </Sheet>
             </template>
         </SheetLayout>
     </div>
@@ -116,6 +143,7 @@ const todayDataList = ref([
     }
 ]);
 
+// 菜单套餐总览模拟数据
 const orderformDataList = ref([
     {
         title: "待接单",
@@ -141,6 +169,48 @@ const orderformDataList = ref([
         title: "全部订单",
         data: "41",
         backgroundColor: "#28A767"
+    }
+])
+
+// 订单信息模拟数据
+const tableData = ref([
+    {
+        no: 2021010200001,
+        name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
+        address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
+        time: "2021-01-02 11：11：11",
+        money: "40.00",
+        notes: "不要香菜",
+    },
+    {
+        no: 2021010200001,
+        name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
+        address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
+        time: "2021-01-02 11：11：11",
+        money: "40.00",
+        notes: "不要香菜",
+    },
+    {
+        no: 2021010200001,
+        name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
+        address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
+        time: "2021-01-02 11：11：11",
+        money: "40.00",
+    },
+    {
+        no: 2021010200001,
+        name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
+        address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
+        time: "2021-01-02 11：11：11",
+        money: "40.00",
+    },
+    {
+        no: 2021010200001,
+        name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
+        address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
+        time: "2021-01-02 11：11：11",
+        money: "40.00",
+        notes: "不要香菜",
     }
 ])
 </script>
@@ -236,6 +306,16 @@ const orderformDataList = ref([
             }
             .right-tool {
 
+            }
+        }
+        .control-btn {
+            color: #2d3478;
+        }
+        .check-box-of-column {
+            display: flex;
+            align-items: center;
+            .el-checkbox {
+                margin-right: 10px;
             }
         }
     }
