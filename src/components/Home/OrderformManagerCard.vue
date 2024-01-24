@@ -24,5 +24,13 @@ const props = defineProps({
     align-items: center;
     flex-direction: column;
     color: white;
+    .data {
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .title {
+        margin-top: 20px;
+        font-size: 14px;
+    }
 }
 </style>

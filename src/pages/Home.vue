@@ -35,13 +35,51 @@
                     菜品/套餐总览
                 </template>
                 <template v-slot:content>
-                    <div class="food-category-manager-container">
-                        <FoodManagerCard></FoodManagerCard>
+                    <!-- 总容器 -->
+                    <div class="food-container">
+                        <!-- 菜品管理 -->
+                        <div class="food-category-manager-container">
+                            <FoodManagerCard title="已起售">12</FoodManagerCard>
+                            <FoodManagerCard title="已停售">02</FoodManagerCard>
+                            <FoodManagerCard title="新增菜品">
+                                <SVGIcon icon-name="add" class="icon"></SVGIcon>
+                            </FoodManagerCard>
+                            <div class="more-info">
+                                查看菜品管理 >
+                            </div>
+                        </div>
+                        <!-- 套餐管理 -->
+                        <div class="foodcombo-manager-container">
+                            <FoodManagerCard title="已起售">12</FoodManagerCard>
+                            <FoodManagerCard title="已停售">02</FoodManagerCard>
+                            <FoodManagerCard title="新增菜品">
+                                <SVGIcon icon-name="add" class="icon"></SVGIcon>
+                            </FoodManagerCard>
+                            <div class="more-info">
+                                查看菜品管理 >
+                            </div>
+                        </div>
                     </div>
-                    <div class="foodcombo-manager-container"></div>
                 </template>
             </ModelPanel>
         </div>
+        <!-- 表格布局容器 -->
+        <SheetLayout class="sheet-container">
+            <!-- 头部工具栏 -->
+            <template v-slot:header>
+                <div class="header-container">
+                    <div class="title">订单信息</div>
+                    <div class="right-tool">
+                        <el-button size="large" plain color="rgb(40, 167, 103)">待接单(12)</el-button>
+                        <el-button size="large" plain color="rgb(40, 167, 103)">待派送(10)</el-button>
+                    </div>
+                </div>
+            </template>
+            <!-- 表格数据 -->
+            <template v-slot:sheet>
+                <Sheet></Sheet>
+            </template>
+        </SheetLayout>
     </div>
 </template>
 <script lang="ts" setup>
@@ -50,6 +88,9 @@ import ModelPanel from "../components/common/ModePanel.vue"
 import TodayDataCard from "../components/Home/TodayDataCard.vue"
 import OrderformManagerCard from "../components/Home/OrderformManagerCard.vue"
 import FoodManagerCard from "../components/Home/FoodManagerCard.vue"
+import SVGIcon from "../components/common/SVGIcon.vue"
+import SheetLayout from "../components/common/SheetLayout.vue"
+import Sheet from "../components/common/Sheet.vue"
 
 // 今日数据模拟数据
 const todayDataList = ref([
@@ -138,7 +179,7 @@ const orderformDataList = ref([
             width: 1px;
             height: 169px;
             background-color: #B7BFDD;
-            margin: 12px 17px;
+            margin: 12px 44px;
         }
         .orderform-manager-panel {
             .orderform-manager-card-container {
@@ -155,6 +196,46 @@ const orderformDataList = ref([
                 cursor: pointer;
                 text-align: right;
                 margin-top: 20px;
+            }
+        }
+        .food-manager-panel {
+            .food-container {
+                display: flex;
+            }
+            .food-category-manager-container, .foodcombo-manager-container {
+                margin-right: 58px;
+                &:last-child {
+                    margin-right: 0;
+                }
+                & > div {
+                    margin-bottom: 11px;
+                    .icon {
+                        width: 24px;
+                        height: 24px;
+                        cursor: pointer;
+                    }
+                }
+                .more-info {
+                    color: #253FCA;
+                    text-align: right;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    .sheet-container {
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            padding: 0 22px;
+            .title {
+                font-size: 26px;
+                font-weight: bold;
+            }
+            .right-tool {
+
             }
         }
     }
