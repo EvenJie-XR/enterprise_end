@@ -91,10 +91,11 @@ const handleCheckAllChange = () => {
     </div>
 
     <div class="Orders">
-      <el-checkbox-group class="checkBoxSingle">
-        <el-checkbox v-for="index in dataList.length" :key="index"></el-checkbox>
-      </el-checkbox-group>
-
+      <div class="checkBoxes">
+        <el-checkbox-group class="checkBoxGroup">
+          <el-checkbox v-for="index in dataList.length" :key="index" class="checkBoxSingle"></el-checkbox>
+        </el-checkbox-group>
+      </div>
       <div class="orderData">
         <div v-for="item in dataList" :key="item.orderNum" class="OrderInfor">
           <div>{{item.orderNum}}</div>
@@ -104,16 +105,28 @@ const handleCheckAllChange = () => {
           <div>{{item.address}}</div>
           <div>{{item.orderTime}}</div>
           <div>{{item.amount}}</div>
+          <div>1</div>
         </div>
       </div>
-
     </div>
 
 
-
-
-
+    <div class="pagination">
+      <el-pagination
+          v-model:current-page="currentPage4"
+          v-model:page-size="pageSize4"
+          :page-sizes="[100, 200, 300, 400]"
+          :small="large"
+          :background="true"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="400"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
+
+
 </template>
 
 <style scoped lang="scss">
@@ -122,6 +135,7 @@ const handleCheckAllChange = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-bottom: 20px;
     justify-content: center;
     .label{
       height: 60px;
@@ -155,31 +169,44 @@ const handleCheckAllChange = () => {
     .Orders{
       margin-top: 10px;
       width: 100%;
-
       display: flex;
-      justify-content: space-evenly;
+      justify-content: space-between;
       margin-bottom: 20px;
-      .checkBoxSingle{
-        width: 5%;
-        display: flex;
-        flex-direction: column;
-        justify-content: right;
-        //align-content: center;
+
+      .checkBoxes{
+        width: 4%;
+        .checkBoxGroup{
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          .checkBoxSingle{
+            padding-top: 10px;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: right;
+          }
+        }
+
       }
 
       .orderData{
-        width: 95%;
+        width: 96%;
         display: flex;
         flex-direction: column;
-        margin-top: 10px;
         .OrderInfor{
           display: flex;
-          justify-content: space-evenly;
-
+          padding-top: 10px;
+          div{
+            flex: 1;
+            text-align: center;
+          }
         }
       }
     }
-
+    :deep(.pagination){
+      --el-color-primary: #A9EBC1;
+    }
   }
 </style>
 
