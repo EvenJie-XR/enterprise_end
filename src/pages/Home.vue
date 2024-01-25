@@ -56,7 +56,7 @@
                                 <SVGIcon icon-name="add" class="icon"></SVGIcon>
                             </FoodManagerCard>
                             <div class="more-info">
-                                查看菜品管理 >
+                                查看套餐管理 >
                             </div>
                         </div>
                     </div>
