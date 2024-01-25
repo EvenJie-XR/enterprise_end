@@ -17,6 +17,25 @@
 </template>
 
 <script setup lang="ts">
+    import { Ref, ref } from 'vue';
+    type categroy = {
+        name: string
+        categoryType: string
+        order: number
+        status: number
+        optionTime: number
+        option: string
+    }
+    const dataList: Ref<categroy[]> = ref([
+        {
+            name: "荤菜",
+            categoryType: "菜品分类",
+            order: 1,
+            status: 1,
+            optionTime: 1,
+            option: '修改'
+        }
+    ])
 
 </script>
 
