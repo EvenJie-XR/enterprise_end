@@ -1,7 +1,9 @@
 <script setup lang="ts">
 
 import { Ref, ref } from "vue";
-
+import SheetLayout from "../common/SheetLayout.vue";
+import Sheet from "../common/Sheet.vue";
+import SelectionLayout from "./SelectionLayout.vue";
 type Order = {
   orderNum: number,
   orderStatus: number
@@ -73,140 +75,67 @@ const handleCheckAllChange = () => {
 </script>
 
 <template>
-  <div class="Content">
-    <div class="label">
-      <div class="checkBoxAll">
-        <el-checkbox
-            v-model="checkAll"
-            :indeterminate="isIndeterminate"
-            @change="handleCheckAllChange"
-            size='large'
-        ></el-checkbox>
-      </div>
-      <div v-for="(item, index) in columnList" :key="index" v-show="item.visible" :style="{backgroundColor: index % 2 === 1 ? '#389E79' : '#A9EBC1'}" class="BarTable">
-        <div class="TableText">
-          {{item.label}}
-        </div>
-      </div>
-    </div>
+  <SheetLayout :table-data="dataList" class="container">
+    <template #header>
+      <SelectionLayout class="seletionBar">
+      </SelectionLayout>
+    </template>
 
-    <div class="Orders">
-      <div class="checkBoxes">
-        <el-checkbox-group class="checkBoxGroup">
-          <el-checkbox v-for="index in dataList.length" :key="index" class="checkBoxSingle"></el-checkbox>
-        </el-checkbox-group>
-      </div>
-      <div class="orderData">
-        <div v-for="item in dataList" :key="item.orderNum" class="OrderInfor">
-          <div>{{item.orderNum}}</div>
-          <div>{{item.orderStatus}}</div>
-          <div>{{item.userName}}</div>
-          <div>{{item.phoneNum}}</div>
-          <div>{{item.address}}</div>
-          <div>{{item.orderTime}}</div>
-          <div>{{item.amount}}</div>
-          <div>1</div>
-        </div>
-      </div>
-    </div>
+    <template #sheet>
+      <Sheet :table-data="dataList" class="tableBody">
+        <el-Table-column prop="orderNum" label="订单号">
+          <template #header="{ column }">
+            <div class="checkBoxOfColumn">
+              <el-checkbox></el-checkbox>
+              {{ column.label }}
+            </div>
+            </template>
+        </el-Table-column>
+        <el-table-column prop="orderStatus" label="订单状态"/>
+        <el-table-column prop="userName" label="用户名" />
+        <el-table-column prop="phoneNum" sortable label="手机号" />
+        <el-table-column prop="address" label="地址" width="100" />
+        <el-table-column prop="orderTime" label="下单时间" />
+        <el-table-column prop="amount" label="实收金额" />
+        <el-table-column prop="control" label="操作">
+            <template #default>
+                <el-button text class="control-btn">接单</el-button>
+                <el-button text class="control-btn">拒单</el-button>
+                <el-button text class="control-btn">查看</el-button>
+            </template>
+        </el-table-column>
+      </Sheet>
+    </template>
 
-
-    <div class="pagination">
-      <el-pagination
-          v-model:current-page="currentPage4"
-          v-model:page-size="pageSize4"
-          :page-sizes="[100, 200, 300, 400]"
-          :small="large"
-          :background="true"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-      />
-    </div>
-  </div>
+    <template #pagination>
+      <el-pagination class="pagination" background layout="prev, pager, next, sizes, jumper" :total="1000" />
+      
+    </template>
+  </SheetLayout>
 
 
 </template>
 
 <style scoped lang="scss">
-  .Content{
+  .container{
+    
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding-bottom: 20px;
-    justify-content: center;
-    .label{
-      height: 60px;
-      width: 98%;
-      border-radius: 10px;
-      // 隐藏多出来的子元素颜色颜色
-      overflow: hidden;
-
-      display: flex;
-      justify-content: space-evenly;
-      .TableText{
-        display: flex;
-        align-items: center;
-        font-weight: 400;
-        font-size: 24px;
-      }
-      .checkBoxAll{
-        width: 3%;
-        height: 100%;
-        display: flex;
-        justify-content: right;
-        align-items: center;
-        background-color: #A9EBC1;
-      }
-      .BarTable{
-        flex: 1;
-        display: flex;
-        justify-content: center;
-      }
-    }
-    .Orders{
-      margin-top: 10px;
+    justify-content: space-between;
+    // align-items: center;
+    .seletionBar{
       width: 100%;
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
 
-      .checkBoxes{
-        width: 4%;
-        .checkBoxGroup{
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          .checkBoxSingle{
-            padding-top: 10px;
-            height: 100%;
-            width: 100%;
-            display: flex;
-            justify-content: right;
-          }
-        }
-
-      }
-
-      .orderData{
-        width: 96%;
-        display: flex;
-        flex-direction: column;
-        .OrderInfor{
-          display: flex;
-          padding-top: 10px;
-          div{
-            flex: 1;
-            text-align: center;
-          }
-        }
-      }
     }
-    :deep(.pagination){
-      --el-color-primary: #A9EBC1;
+    .tableBody{
+      margin-top: 20px;
     }
+    .pagination{
+      margin-top: 20px;
+    }
+    
+
   }
 </style>
 

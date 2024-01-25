@@ -1,27 +1,21 @@
 <template>
   <h2>订单信息</h2>
   <div class="Content">
+    <!-- 顶部的搜索框 -->
     <div class="TopBar">
       <SearchBar></SearchBar>
     </div>
 
+    <!-- 订单的显示页面 -->
     <div class="Orders">
-      <div class="OrderBar">
-        <SelectionLayout>
-        </SelectionLayout>
-      </div>
-
-      <div class="OrderContent">
         <OrderContent>
         </OrderContent>
-      </div>
     </div>
   </div>
 
 </template>
 <script lang="ts" setup>
   import SearchBar from "../components/OrderformManager/SearchBar.vue";
-  import SelectionLayout from "../components/OrderformManager/SelectionLayout.vue";
   import OrderContent from "../components/OrderformManager/OrderContent.vue";
 </script>
 
@@ -37,14 +31,9 @@
       margin-top: 20px;
       background-color: #fff;
       border-radius: 10px;
-
-      .OrderBar{
-        height: 80px;
-        border-bottom: 1px solid #B7BFDD;
-      }
-      .OrderContent{
-        margin-top: 10px;
-      }
+      padding: 20px;
+      // display: flex;
+      // justify-content: center;
     }
   }
 </style>
