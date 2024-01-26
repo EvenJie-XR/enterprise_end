@@ -77,7 +77,7 @@
             </template>
             <!-- 表格数据 -->
             <template v-slot:sheet>
-                <Sheet :table-data="tableData" >
+                <Sheet :table-data="tableData" :pinto="true" >
                     <el-table-column prop="no" label="订单号">
                         <template #header="{ column }">
                             <div class="check-box-of-column">
