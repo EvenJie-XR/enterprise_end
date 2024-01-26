@@ -30,14 +30,17 @@
     </Sheet>
 -->
 <template>
-    <el-table :data="props.tableData" style="width: 100%" :class="{'sheet-container': true, 'pinto': pinto}" height="100%">
+    <el-table :data="props.tableData" style="width: 100%" :class="{'sheet-container': true, 'pinto': pinto, 'tbody-pinto': !pinto}" height="100%">
         <slot></slot>
     </el-table>
 </template>
 <script lang="ts" setup>
     const props = defineProps({
         tableData: Object,
-        pinto: Boolean
+        pinto: {
+            type: Boolean,
+            default: true
+        }
     })
 </script>
 
@@ -47,6 +50,11 @@
         th {
             background-color: #A9EBC1;
             color: black;
+        }
+    }
+    &.tbody-pinto:deep(tbody) {
+        tr:nth-child(even) {
+            background: rgba(169, 235, 193, 0.34);
         }
     }
     &.pinto:deep(thead) {
