@@ -234,7 +234,6 @@ const sheet = ref([
             padding: 0 18px;
             border-radius: 10px;
             box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-            justify-content: space-around;
             .form-contianer {
                 display: flex;
                 align-items: center;
@@ -245,12 +244,15 @@ const sheet = ref([
                     .form-key {
                         font-size: 22px;
                     }
-
+                    .form-value {
+                        margin-left: 10px;
+                    }
                 }
             }
             .search-btn {
                 font-size: 22px;
                 padding: 20px 40px;
+                margin-left: 40px;
             }
         }
     }
