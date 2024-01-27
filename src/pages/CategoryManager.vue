@@ -65,10 +65,10 @@
                         <el-table-column prop="status" label="状态" />
                         <el-table-column prop="controlTime" sortable label="操作时间" />
                         <el-table-column prop="control" label="操作">
-                            <template #default>
-                                <el-button text class="control-btn">接单</el-button>
-                                <el-button text class="control-btn">拒单</el-button>
-                                <el-button text class="control-btn">查看</el-button>
+                            <template #default="row">
+                                <el-button text class="control-btn">修改</el-button>
+                                <el-button text class="control-btn" @click="delCategroy(row, row.$index)">删除</el-button>
+                                <el-button text class="control-btn" @click="chanegCategroyStatus(row.row)">{{ row.row.status == "启用" ? "禁用" : "启用" }}</el-button>
                             </template>
                         </el-table-column>
                     </Sheet>
@@ -84,7 +84,7 @@
 import { ref } from "vue";
 import ModelPanel from "../components/common/ModePanel.vue"
 import Sheet from "../components/common/Sheet.vue"
-
+import { Notification } from "../components/common/Notification.vue";
 // 菜品名称
 const foodName = ref();
 // 售卖状态
@@ -105,74 +105,73 @@ const sheet = ref([
     {
         name: "荤菜",
         category: "菜品分类",
-        sort: "1",
+        sort: 1,
         status: "启用",
         controlTime: "2021-01-02 11：11",
     },
     {
         name: "荤菜",
         category: "菜品分类",
-        sort: "2",
+        sort: 2,
         status: "启用",
         controlTime: "2021-01-02 11：11",
     },
     {
         name: "荤菜",
         category: "菜品分类",
-        sort: "3",
+        sort: 3,
         status: "启用",
         controlTime: "2021-01-02 11：11",
     },
     {
         name: "周一套餐",
         category: "套餐分类",
-        sort: "4",
+        sort: 4,
         status: "禁用",
         controlTime: "2021-01-02 11：11",
     },
     {
         name: "荤菜",
         category: "菜品分类",
-        sort: "5",
+        sort: 5,
         status: "禁用",
         controlTime: "2021-01-02 11：11",
     },
     {
         name: "荤菜",
         category: "菜品分类",
-        sort: "6",
-        status: "启用",
-        controlTime: "2021-01-02 11：11",
-    },
-    {
-        name: "荤菜",
-        category: "菜品分类",
-        sort: "1",
-        status: "禁用",
-        controlTime: "2021-01-02 11：11",
-    },
-    {
-        name: "荤菜",
-        category: "菜品分类",
-        sort: "1",
-        status: "启用",
-        controlTime: "2021-01-02 11：11",
-    },
-    {
-        name: "荤菜",
-        category: "菜品分类",
-        sort: "1",
-        status: "启用",
-        controlTime: "2021-01-02 11：11",
-    },
-    {
-        name: "荤菜",
-        category: "菜品分类",
-        sort: "1",
+        sort: 6,
         status: "启用",
         controlTime: "2021-01-02 11：11",
     }
 ])
+
+// 修改分类状态
+const chanegCategroyStatus = (dataItem: any) =>{
+    const message = "确定" + `${dataItem.status == "启用" ? "禁用" : "启用"}` + "该分类吗？"
+    // 弹出确认框
+    Notification(message).then( (result) => {
+        // 用户确认删除
+        if (dataItem.status == "启用"){
+            dataItem.status = "禁用"
+        }
+        else{
+            dataItem.status = "启用"
+        }
+    })
+}
+
+// 删除分类
+const delCategroy = (data: any, index: number) =>{
+    // TODO：修改删除样式
+    const message = "确定删除该分类吗？"
+    // 弹出确认框
+    Notification(message).then( () => {
+        // 用户确认删除
+        sheet.value.splice(index, 1)                
+    })
+}
+
 </script>
 
 <style lang="scss" scoped>

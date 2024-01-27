@@ -95,10 +95,10 @@
                         <el-table-column prop="salesStatus" label="售卖状态" width="100px" />
                         <el-table-column prop="theEndControlTime" sortable label="最后操作时间" />
                         <el-table-column prop="control" label="操作">
-                            <template #default>
-                                <el-button text class="control-btn">接单</el-button>
-                                <el-button text class="control-btn">拒单</el-button>
-                                <el-button text class="control-btn">查看</el-button>
+                            <template #default="row">
+                                <el-button text class="control-btn">修改</el-button>
+                                <el-button text class="control-btn" @click="delCategroy(row.row, row.$index)">删除</el-button>
+                                <el-button text class="control-btn" @click="chanegCategoryStatus(row.row)">{{ row.row.salesStatus == "启售" ? "停售" : "启售" }}</el-button>
                             </template>
                         </el-table-column>
                     </Sheet>
@@ -115,7 +115,7 @@ import { ref } from "vue";
 import ModelPanel from "../components/common/ModePanel.vue"
 import Sheet from "../components/common/Sheet.vue"
 import YuXiangRouSiImage from "../assets/YuXiangRouSi.jpg"
-
+import { Notification } from "../components/common/Notification.vue";
 // 菜品名称
 const foodName = ref();
 // 菜品分类名称
@@ -216,6 +216,36 @@ const sheet = ref([
         theEndControlTime: "2021-01-02 11：11",
     }
 ])
+
+// 修改菜品状态
+const chanegCategoryStatus = (dataItem: any) =>{
+    const message = "确定" + `${dataItem.salesStatus == "启售" ? "停售" : "启售"}` + "该菜品吗？"
+    // 弹出确认框 
+    Notification(message).then( () => {
+        // 用户确认删除
+        if (dataItem.salesStatus == "启售"){
+            dataItem.salesStatus = "停售"
+        }
+        else{
+            dataItem.salesStatus = "启售"
+        }
+    })
+
+
+}
+
+// 删除分类
+const delCategroy = (data: any, index: number) =>{
+    // TODO: 修改删除的样式
+    const message = "确定删除该菜品吗？（删除后很难恢复）"
+    // 弹出确认框
+    Notification(message).then( () => {
+        // 用户确认删除
+        sheet.value.splice(index, 1)                
+    })
+}
+
+
 </script>
 
 <style lang="scss" scoped>
