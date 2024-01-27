@@ -46,7 +46,7 @@
             <template #content>
                 <div class="content-container">
                     <Sheet class="sheet-container" :pinto="false" :table-data="sheet" height="500px">
-                        <el-table-column prop="name" label="菜品名称">
+                        <el-table-column prop="name" label="分类名称">
                             <template #header="{ column }">
                                 <div class="check-box-of-column">
                                     <el-checkbox class="checkbox" />
@@ -60,18 +60,10 @@
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="image" label="图片" width="140px">
-                            <template #default="{ row }">
-                                <div style="display: flex; align-items: center">
-                                    <el-image style="width: 106px; height: 54px" :src="row.image"
-                                        :preview-src-list="[row.image]" :preview-teleported="true" fit="cover" />
-                                </div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="category" label="商品分类" width="140px" />
-                        <el-table-column prop="price" label="售价" width="140px" />
-                        <el-table-column prop="salesStatus" label="售卖状态" width="100px" />
-                        <el-table-column prop="theEndControlTime" sortable label="最后操作时间" />
+                        <el-table-column prop="category" label="分类类型" />
+                        <el-table-column prop="sort" label="排序" />
+                        <el-table-column prop="status" label="状态" />
+                        <el-table-column prop="controlTime" sortable label="操作时间" />
                         <el-table-column prop="control" label="操作">
                             <template #default>
                                 <el-button text class="control-btn">接单</el-button>
@@ -81,7 +73,7 @@
                         </el-table-column>
                     </Sheet>
                     <div class="pagination-container">
-                        <el-pagination background layout="total, prev, pager, next" :total="1000" />
+                        <el-pagination background layout="prev, pager, next, sizes, jumper" :total="1000" />
                     </div>
                 </div>
             </template>
@@ -92,7 +84,6 @@
 import { ref } from "vue";
 import ModelPanel from "../components/common/ModePanel.vue"
 import Sheet from "../components/common/Sheet.vue"
-import YuXiangRouSiImage from "../assets/YuXiangRouSi.jpg"
 
 // 菜品名称
 const foodName = ref();
@@ -112,84 +103,74 @@ const salesStatusOptionList = ref([
 
 const sheet = ref([
     {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
+        name: "荤菜",
+        category: "菜品分类",
+        sort: "1",
+        status: "启用",
+        controlTime: "2021-01-02 11：11",
     },
     {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
+        name: "荤菜",
+        category: "菜品分类",
+        sort: "2",
+        status: "启用",
+        controlTime: "2021-01-02 11：11",
     },
     {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
+        name: "荤菜",
+        category: "菜品分类",
+        sort: "3",
+        status: "启用",
+        controlTime: "2021-01-02 11：11",
     },
     {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
+        name: "周一套餐",
+        category: "套餐分类",
+        sort: "4",
+        status: "禁用",
+        controlTime: "2021-01-02 11：11",
     },
     {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
+        name: "荤菜",
+        category: "菜品分类",
+        sort: "5",
+        status: "禁用",
+        controlTime: "2021-01-02 11：11",
     },
     {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
+        name: "荤菜",
+        category: "菜品分类",
+        sort: "6",
+        status: "启用",
+        controlTime: "2021-01-02 11：11",
     },
     {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
+        name: "荤菜",
+        category: "菜品分类",
+        sort: "1",
+        status: "禁用",
+        controlTime: "2021-01-02 11：11",
     },
     {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
+        name: "荤菜",
+        category: "菜品分类",
+        sort: "1",
+        status: "启用",
+        controlTime: "2021-01-02 11：11",
     },
     {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
+        name: "荤菜",
+        category: "菜品分类",
+        sort: "1",
+        status: "启用",
+        controlTime: "2021-01-02 11：11",
     },
     {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
+        name: "荤菜",
+        category: "菜品分类",
+        sort: "1",
+        status: "启用",
+        controlTime: "2021-01-02 11：11",
     }
 ])
 </script>
@@ -284,7 +265,7 @@ const sheet = ref([
 
         .pagination-container {
             display: flex;
-            justify-content: flex-end;
+            justify-content: center;
         }
     }
 }</style>
