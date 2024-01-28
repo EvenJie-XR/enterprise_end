@@ -98,10 +98,12 @@
                     <el-table-column prop="money" label="实收金额" width="100" />
                     <el-table-column prop="notes" label="备注" />
                     <el-table-column prop="control" label="操作">
-                        <template #default>
+                        <template #default="row">
                             <el-button text class="control-btn">接单</el-button>
-                            <el-button text class="control-btn">拒单</el-button>
+                            <el-button text class="control-btn" @click="refuseOrder(row, row.$index)">拒单</el-button>
                             <el-button text class="control-btn">查看</el-button>
+                            <!-- TODO 取消按钮出现的条件 -->
+                            <el-button text class="control-btn" @click="cancelOrder(row, row.$index)">取消</el-button>
                         </template>
                     </el-table-column>
                 </Sheet>
@@ -111,6 +113,20 @@
             </template>
         </SheetLayout>
     </div>
+
+    <el-dialog v-model="dialogVisible" :title="dialogTittle">
+    <el-form :model="reason">
+      <el-form-item :label="dialogTittle" label-width="100px">
+        <el-input v-model="reason.reason" autocomplete="off" :placeholder= "`请输入${dialogTittle}`"/>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false" size="large">取消</el-button>
+        <el-button type="primary" @click="dialogVisible = false" size="large">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
@@ -121,6 +137,12 @@ import FoodManagerCard from "../components/Home/FoodManagerCard.vue"
 import SVGIcon from "../components/common/SVGIcon.vue"
 import SheetLayout from "../components/common/SheetLayout.vue"
 import Sheet from "../components/common/Sheet.vue"
+
+let dialogVisible = ref(false)
+let dialogTittle = ref("")
+let reason = ref({
+    reason: ""
+})
 
 // 今日数据模拟数据
 const todayDataList = ref([
@@ -216,6 +238,26 @@ const tableData = ref([
         notes: "不要香菜",
     }
 ])
+
+// 拒单处理函数
+const refuseOrder = (row: any, index: number) => {
+    // 记录被点击的数据
+    console.log(row, index);
+    dialogTittle.value = "拒单原因"
+    dialogVisible.value = true
+}
+
+
+// 取消处理函数
+const cancelOrder = (row: any, index: number) => {
+    // 记录被点击的数据
+    console.log(row, index);
+    dialogTittle.value = "取消原因"
+    dialogVisible.value = true
+}
+
+// TODO 弹窗确认后的逻辑函数
+
 </script>
 
 <style lang="scss" scoped>
