@@ -1,7 +1,7 @@
 <template>
 
 </template>
-
+<!-- 删除和修改状态的弹窗 -->
 <script lang="ts">
     import { ElMessageBox , ElMessage} from 'element-plus'
     

@@ -114,8 +114,6 @@ const handleCheckAllChange = () => {
   </SheetLayout>
 
 
-</template>
-
 <style scoped lang="scss">
   .container{
     

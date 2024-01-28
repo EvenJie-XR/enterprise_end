@@ -109,6 +109,9 @@
             </template>
         </ModelPanel>
     </div>
+
+
+
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
@@ -236,8 +239,6 @@ const chanegCategoryStatus = (dataItem: any) =>{
 
 // 删除分类
 const delCategroy = (data: any, index: number) =>{
-    // TODO: 修改删除的样式
-
     // const message = "确定删除该菜品吗？（删除后很难恢复）"
     const message = `<div>确定删除该菜品吗？</div> <div class="reminding-text">删除后很难恢复</div>`
     // 弹出确认框
@@ -246,6 +247,8 @@ const delCategroy = (data: any, index: number) =>{
         sheet.value.splice(index, 1)                
     })
 }
+
+
 
 
 </script>

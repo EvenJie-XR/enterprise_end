@@ -39,8 +39,8 @@
         <ModelPanel class="data-sheet-container">
             <template #header>
                 <div class="header-container">
-                    <el-button color="#389E79" size="large" class="btn">新增菜品分类</el-button>
-                    <el-button color="#389E79" size="large" class="btn">新增套餐分类</el-button>
+                    <el-button color="#389E79" size="large" class="btn" @click="addDishCategory">新增菜品分类</el-button>
+                    <el-button color="#389E79" size="large" class="btn" @click="addComboCategory">新增套餐分类</el-button>
                 </div>
             </template>
             <template #content>
@@ -79,6 +79,24 @@
             </template>
         </ModelPanel>
     </div>
+
+    <el-dialog v-model="dialogVisible" :title="dialogTittle">
+    <el-form :model="form">
+      <el-form-item :label="InputLabel" label-width="100px">
+        <el-input v-model="form.name" autocomplete="off" placeholder="请输入"/>
+      </el-form-item>
+      <el-form-item label="排序：" label-width="100px">
+        <el-input v-model="form.order" autocomplete="off" placeholder="请输入"/>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false" size="large">取消</el-button>
+        <el-button type="primary" @click="updataSheet(true)" size="large">保存并继续添加</el-button>
+        <el-button type="primary" @click="updataSheet(false)" size="large">保存</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
@@ -105,46 +123,59 @@ const sheet = ref([
     {
         name: "荤菜",
         category: "菜品分类",
-        sort: 1,
+        sort: "1",
         status: "启用",
         controlTime: "2021-01-02 11：11",
     },
     {
         name: "荤菜",
         category: "菜品分类",
-        sort: 2,
+        sort: "2",
         status: "启用",
         controlTime: "2021-01-02 11：11",
     },
     {
         name: "荤菜",
         category: "菜品分类",
-        sort: 3,
+        sort: "3",
         status: "启用",
         controlTime: "2021-01-02 11：11",
     },
     {
         name: "周一套餐",
         category: "套餐分类",
-        sort: 4,
+        sort: "4",
         status: "禁用",
         controlTime: "2021-01-02 11：11",
     },
     {
         name: "荤菜",
         category: "菜品分类",
-        sort: 5,
+        sort: "5",
         status: "禁用",
         controlTime: "2021-01-02 11：11",
     },
     {
         name: "荤菜",
         category: "菜品分类",
-        sort: 6,
+        sort: "6",
         status: "启用",
         controlTime: "2021-01-02 11：11",
     }
 ])
+// 决定对话框显示
+let dialogVisible = ref(false)
+// 对话框中 输入框的提示词
+let InputLabel = ref("")
+// 新增数据存放
+let form = ref({
+    name: "",
+    order: ""
+})
+// 对话框标题
+let dialogTittle = ref("")
+// 记录用户新增的是套餐还是菜品 0套餐 1菜品
+let option: number
 
 // 修改分类状态
 const chanegCategroyStatus = (dataItem: any) =>{
@@ -172,9 +203,45 @@ const delCategroy = (data: any, index: number) =>{
     })
 }
 
+// 新增菜品分类
+const addDishCategory = () => {
+    dialogTittle.value = "新建菜品分类"
+    InputLabel.value = "分类名称："
+    dialogVisible.value = true
+    option = 1
+}
+
+// 新增套餐分类
+const addComboCategory = () => {
+    dialogTittle.value = "新建套餐分类"
+    InputLabel.value = "套餐名称："
+    dialogVisible.value = true
+    option = 0
+}
+
+// 保存数据
+const updataSheet = (again: boolean) => {
+    dialogVisible.value = again
+    const newData = {
+        name: form.value.name,
+        category: option === 0 ? "套餐分类" : "菜品分类",
+        sort: form.value.order,
+        status: "启用",
+        // TODO: 改为当前时间
+        controlTime: "2021-01-02 11：11",
+    }
+    sheet.value.push(newData)
+    // 清空input框
+    form.value = {
+        name: "",
+        order: ""
+    }
+}
+
+
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .food-category-manager-container {
     padding: 20px 20px 20px 0;
 
@@ -267,4 +334,21 @@ const delCategroy = (data: any, index: number) =>{
             justify-content: center;
         }
     }
-}</style>
+}
+
+// dialog的样式
+.el-dialog__footer{
+    border-top: 1px #999999 solid;
+    display: flex;
+    justify-content: center;
+}
+
+.el-dialog__header{
+    // padding: 0 !important;
+    margin: 0 !important;
+    border-bottom: 1px #999999 solid;
+    size: 34px;
+}
+
+
+</style>
