@@ -65,6 +65,7 @@ import SVGIcon from "../common/SVGIcon.vue"
             justify-content: center;
             align-items: center;
             font-weight: 400;
+            cursor: pointer;
         }
     }
     // 右侧容器
@@ -81,6 +82,7 @@ import SVGIcon from "../common/SVGIcon.vue"
             color: white;
             display: flex;
             justify-content: center;
+            cursor: pointer;
             align-items: center;
             font-weight: 400;
             margin-right: 32px;
