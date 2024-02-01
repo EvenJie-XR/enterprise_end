@@ -79,8 +79,8 @@
             </template>
         </ModelPanel>
     </div>
-
-    <el-dialog v-model="dialogVisible" :title="dialogTittle">
+    <!-- 新增菜品分类和套餐的弹窗 -->
+    <el-dialog v-model="dialogVisible" :title="dialogTittle" class="add-dialog">
     <el-form :model="form">
       <el-form-item :label="InputLabel" label-width="100px">
         <el-input v-model="form.name" autocomplete="off" placeholder="请输入"/>
@@ -241,7 +241,7 @@ const updataSheet = (again: boolean) => {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .food-category-manager-container {
     padding: 20px 20px 20px 0;
 
@@ -336,19 +336,22 @@ const updataSheet = (again: boolean) => {
     }
 }
 
-// dialog的样式
-.el-dialog__footer{
-    border-top: 1px #999999 solid;
-    display: flex;
-    justify-content: center;
+.add-dialog{
+    // dialog的样式
+    .el-dialog__footer{
+        border-top: 1px #999999 solid;
+        display: flex;
+        justify-content: center;
+    }
+
+    .el-dialog__header{
+        // padding: 0 !important;
+        margin: 0 !important;
+        border-bottom: 1px #999999 solid;
+        size: 34px;
+    }
 }
 
-.el-dialog__header{
-    // padding: 0 !important;
-    margin: 0 !important;
-    border-bottom: 1px #999999 solid;
-    size: 34px;
-}
 
 
 </style>

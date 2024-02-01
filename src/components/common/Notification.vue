@@ -6,6 +6,7 @@
     import { ElMessageBox , ElMessage} from 'element-plus'
     
     const Notification = async (message: string) => {
+        // 返回一个promise
         // 不同的调用模块提供相应的message
         console.log(message);
         

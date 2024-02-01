@@ -99,11 +99,11 @@
                     <el-table-column prop="notes" label="备注" />
                     <el-table-column prop="control" label="操作">
                         <template #default="row">
-                            <el-button text class="control-btn">接单</el-button>
-                            <el-button text class="control-btn" @click="refuseOrder(row, row.$index)">拒单</el-button>
+                            <el-button text class="control-btn" @click="acceptOrder(row, row.$index)">接单</el-button>
+                            <el-button text class="control-btn" @click="cancelandRefuseOrder(row, row.$index, '拒单原因')">拒单</el-button>
                             <el-button text class="control-btn">查看</el-button>
                             <!-- TODO 取消按钮出现的条件 -->
-                            <el-button text class="control-btn" @click="cancelOrder(row, row.$index)">取消</el-button>
+                            <el-button text class="control-btn" @click="cancelandRefuseOrder(row, row.$index, '取消原因')">取消</el-button>
                         </template>
                     </el-table-column>
                 </Sheet>
@@ -112,9 +112,8 @@
                 <el-pagination background layout="prev, pager, next, sizes, jumper" :total="1000" />
             </template>
         </SheetLayout>
-    </div>
-
-    <el-dialog v-model="dialogVisible" :title="dialogTittle">
+            <!-- 接单和拒单的弹窗 -->
+            <el-dialog v-model="dialogVisible" :title="dialogTittle" style="background-color: #F1F3EF; border-radius: 10px;">
     <el-form :model="reason">
       <el-form-item :label="dialogTittle" label-width="100px">
         <el-input v-model="reason.reason" autocomplete="off" :placeholder= "`请输入${dialogTittle}`"/>
@@ -127,6 +126,28 @@
       </span>
     </template>
   </el-dialog>
+    </div>
+
+
+  <!-- 永达无界弹窗 -->
+  <el-dialog v-model="systemNoticeVisible" append-to=".home-container" title="系统通知" width="30%" class="systemNotice" style="border-radius: 10px; background: #F1F3EF;" center>
+    <template #default>
+        <div class="systemNotice-container">
+            <div class="systemNotice-time">2023-08-17 18：33</div>
+            <div class="systemNotice-content">
+                <div class="systemNotice-top">
+                    <div class="header">欢迎使用永达无界</div>
+                    <div class="content">欢迎使用永达无界外卖商家端</div>
+                </div>
+                <a class="systemNotice-footer">
+                        <span>查看详情</span>
+                        <span> > </span>
+                </a>
+                
+            </div>
+        </div>
+    </template>
+  </el-dialog>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
@@ -137,7 +158,8 @@ import FoodManagerCard from "../components/Home/FoodManagerCard.vue"
 import SVGIcon from "../components/common/SVGIcon.vue"
 import SheetLayout from "../components/common/SheetLayout.vue"
 import Sheet from "../components/common/Sheet.vue"
-
+import { Notification } from "../components/common/Notification.vue";
+// 取消和拒单的数据
 let dialogVisible = ref(false)
 let dialogTittle = ref("")
 let reason = ref({
@@ -239,24 +261,28 @@ const tableData = ref([
     }
 ])
 
-// 拒单处理函数
-const refuseOrder = (row: any, index: number) => {
+
+// 取消和拒绝订单处理函数
+const cancelandRefuseOrder = (row: any, index: number, tittle: string) => {
     // 记录被点击的数据
     console.log(row, index);
-    dialogTittle.value = "拒单原因"
+    dialogTittle.value = tittle
     dialogVisible.value = true
 }
 
+// TODO 拒单和取消弹订单窗确认后的逻辑函数
 
-// 取消处理函数
-const cancelOrder = (row: any, index: number) => {
-    // 记录被点击的数据
-    console.log(row, index);
-    dialogTittle.value = "取消原因"
-    dialogVisible.value = true
+// TODO 查看订单逻辑函数
+
+// 系统提示可见变量
+let systemNoticeVisible = ref(true)
+
+const acceptOrder = (row: any, index: number) => {
+    Notification("确认接单").then( () => {
+        console.log("接单成功");
+        
+    } )
 }
-
-// TODO 弹窗确认后的逻辑函数
 
 </script>
 
@@ -367,4 +393,70 @@ const cancelOrder = (row: any, index: number) => {
         }
     }
 }
+
+// 系统消息内部样式
+:deep(.el-dialog__header){
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        padding: 10px;
+        margin: 0px !important;
+        background-color: white;
+}
+:deep(.el-dialog__body){
+    // display: flex;
+    // justify-content: center;
+    padding: 100px;
+}
+.systemNotice{
+
+    .systemNotice-container{
+        // width: 40%;
+        // padding-top: 60px;
+        // padding-bottom: 60px;
+        // padding-left: auto;
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
+        // justify-content: space-evenly;
+        align-items: center;
+        .systemNotice-time{
+            margin-top: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .systemNotice-content{
+            background-color: white;
+            border-radius: 10px;
+            width: 70%;
+            margin-bottom: 80px;
+            .systemNotice-top{
+                padding: 10px;
+                .header{
+                    font-size: 20px;
+                    margin-bottom: 10px;
+                }
+                .content{
+                    font-size: 14px;
+                    min-height: 100px;
+                }
+            }
+            .systemNotice-footer{
+                padding: 10px;
+                border-top: 1px solid #888888 ;
+                height: 20px;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    }
+}
+
+:deep(.el-dialog__header){
+    margin: 0px !important;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: white !important;
+    border-bottom: 1px solid #999999;
+  }
+
 </style>
