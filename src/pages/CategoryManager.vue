@@ -78,9 +78,9 @@
                 </div>
             </template>
         </ModelPanel>
-    </div>
-    <!-- 新增菜品分类和套餐的弹窗 -->
-    <el-dialog v-model="dialogVisible" :title="dialogTittle" class="add-dialog">
+
+            <!-- 新增菜品分类和套餐的弹窗 -->
+    <el-dialog v-model="dialogVisible" :title="dialogTittle" class="add-dialog" style="background-color: #F1F3EF; border-radius: 10px;">
     <el-form :model="form">
       <el-form-item :label="InputLabel" label-width="100px">
         <el-input v-model="form.name" autocomplete="off" placeholder="请输入"/>
@@ -97,6 +97,8 @@
       </span>
     </template>
   </el-dialog>
+    </div>
+
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
@@ -336,21 +338,26 @@ const updataSheet = (again: boolean) => {
     }
 }
 
-.add-dialog{
     // dialog的样式
-    .el-dialog__footer{
+    :deep(.el-dialog__footer){
+        background-color: #fff;
         border-top: 1px #999999 solid;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
         display: flex;
         justify-content: center;
     }
 
-    .el-dialog__header{
+    :deep(.el-dialog__header){
+        
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        background-color: #fff;
         // padding: 0 !important;
         margin: 0 !important;
         border-bottom: 1px #999999 solid;
         size: 34px;
     }
-}
 
 
 

@@ -92,6 +92,7 @@
                             </div>
                         </template>
                     </el-table-column>
+                    <el-table-column prop="status" label="派送状态"/>
                     <el-table-column prop="name" label="订单菜品"/>
                     <el-table-column prop="address" label="地址" />
                     <el-table-column prop="time" sortable label="预计送达时间" />
@@ -195,12 +196,12 @@ const orderformDataList = ref([
     {
         title: "待接单",
         data: "12",
-        backgroundColor: "#417BD3"
+        backgroundColor: "rgb(255,128,0)"
     },
     {
         title: "待派送",
         data: "10",
-        backgroundColor: "#417BD3"
+        backgroundColor: "rgb(255,128,0)"
     },
     {
         title: "已完成",
@@ -223,6 +224,7 @@ const orderformDataList = ref([
 const tableData = ref([
     {
         no: 2021010200001,
+        status: "派送中",
         name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
         address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
         time: "2021-01-02 11：11：11",
@@ -231,34 +233,14 @@ const tableData = ref([
     },
     {
         no: 2021010200001,
+        status: "派送中",
         name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
         address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
         time: "2021-01-02 11：11：11",
         money: "40.00",
         notes: "不要香菜",
     },
-    {
-        no: 2021010200001,
-        name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
-        address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        time: "2021-01-02 11：11：11",
-        money: "40.00",
-    },
-    {
-        no: 2021010200001,
-        name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
-        address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        time: "2021-01-02 11：11：11",
-        money: "40.00",
-    },
-    {
-        no: 2021010200001,
-        name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
-        address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        time: "2021-01-02 11：11：11",
-        money: "40.00",
-        notes: "不要香菜",
-    }
+
 ])
 
 

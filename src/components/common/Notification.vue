@@ -39,7 +39,7 @@
 
 </script>
 
-<style lang="scss" >
+<style lang="scss">
     .el-message-box{
         // height: 20%;
         width: 20% !important;
