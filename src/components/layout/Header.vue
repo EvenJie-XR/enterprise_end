@@ -131,4 +131,42 @@ import SVGIcon from "../common/SVGIcon.vue"
         }
     }
 }
+
+// 手机端竖屏
+@media screen and (max-width: 768px) {
+    .header-container {
+        justify-content: center;
+        .left-container {
+            .logo {
+                margin: 0;
+            }
+            .business-state {
+                display: none;
+            }
+        }
+        // 隐藏营业状态，商家头像等放到nav里面展示，手机端的导航栏只展示一个logo和侧边栏展开按钮
+        .right-container {
+            display: none;
+        }
+    }
+}
+
+// ipad或手机端横屏
+@media screen and (min-width: 769px) and (max-width: 1200px) {
+    .header-container {
+        justify-content: center;
+        .left-container {
+            .logo {
+                margin: 0;
+            }
+            .business-state {
+                display: none;
+            }
+        }
+        // 隐藏营业状态，商家头像等放到nav里面展示，手机端的导航栏只展示一个logo和侧边栏展开按钮
+        .right-container {
+            display: none;
+        }
+    }
+}
 </style>

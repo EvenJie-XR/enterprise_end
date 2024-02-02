@@ -30,4 +30,20 @@ const props = defineProps({
         margin-top: 22px;
     }
 }
+
+// 手机端竖屏
+@media screen and (max-width: 768px) {
+    .today-data-card-container {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+// ipad或手机端横屏
+@media screen and (min-width: 769px) and (max-width: 1200px) {
+    .today-data-card-container {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
 </style>

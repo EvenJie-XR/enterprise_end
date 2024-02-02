@@ -23,4 +23,10 @@
     padding: 0 26px 0 16px;
     box-sizing: border-box;
 }
+
+@media screen and (min-width: 769px) and (max-width: 1200px) {
+    .food-manager-card-container {
+        width: 386px;
+    }
+}
 </style>

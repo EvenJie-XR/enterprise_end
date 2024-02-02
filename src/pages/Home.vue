@@ -325,4 +325,66 @@ const tableData = ref([
         }
     }
 }
+
+// 手机端竖屏
+@media screen and (max-width: 768px) {
+    .home-container {
+        padding: 28px;
+        .today-data-card-list-container {
+            flex-direction: column;
+        }
+        .orderform-manager-and-food-manager-container {
+            flex-direction: column;
+            .slice-line {
+                display: none;
+            }
+            .orderform-manager-panel {
+                .orderform-manager-card-container {
+                    flex-direction: column;
+                }
+            }
+        }
+    }
+}
+
+// ipad或手机端横屏
+@media screen and (min-width: 769px) and (max-width: 1200px) {
+    .home-container {
+        padding: 28px;
+        .today-data-card-list-container {
+            flex-direction: column;
+        }
+        .orderform-manager-and-food-manager-container {
+            flex-direction: column;
+            .slice-line {
+                display: none;
+            }
+            .orderform-manager-panel {
+                .orderform-manager-card-container {
+                    flex-direction: column;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1690px) {
+    .home-container {
+        padding: 28px 28px 28px 0;
+        .orderform-manager-and-food-manager-container {
+            flex-direction: column;
+            .slice-line {
+                display: none;
+            }
+            .orderform-manager-card-container {
+                justify-content: space-around;
+            }
+            .food-manager-panel {
+                .food-container {
+                    justify-content: space-around;
+                }
+            }
+        }
+    }
+}
 </style>
