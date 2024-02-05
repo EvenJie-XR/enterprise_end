@@ -24,7 +24,7 @@
             <!-- 商家信息 -->
             <div class="avatar-container">
                 <div class="avatar"></div>
-                <div class="name">管理员</div>
+                <div class="name">沙县小吃</div>
             </div>
         </div>
     </div>
