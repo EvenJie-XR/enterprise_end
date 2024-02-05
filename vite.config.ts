@@ -5,6 +5,7 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "/enterprise_end",
   plugins: [
     vue(),
     // 使用node处理src/svgs用于实现SVGIcon组件

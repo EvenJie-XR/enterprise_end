@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router"
+import { createRouter, createWebHistory } from "vue-router"
 import Home from "../pages/Home.vue"
 import OrderformManager from "../pages/OrderformManager.vue"
 import CategoryManager from "../pages/CategoryManager.vue"
@@ -6,7 +6,7 @@ import FoodCategoryManager from "../pages/FoodCategoryManager.vue"
 import DataStatistics from "../pages/DataStatistics.vue"
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes: [
         // 工作台
         {
