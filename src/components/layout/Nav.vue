@@ -7,14 +7,13 @@
 </template>
 <script lang="ts" setup>
 import SVGIcon from "../common/SVGIcon.vue"
-import { Ref, ref, watch } from "vue";
+import { Ref, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router"
 import { router } from "../../routers/index"
 
 // 当前路由信息对象
 const route = useRoute();
-// 监听路由发生了切换
-watch(route, () => {
+const handleNavActive = () => {
     // 根据当前路由信息判断导航栏需要高亮的元素
     route.matched.forEach((matchedItem) => {
         navList.value.forEach((navItem) => {
@@ -24,6 +23,13 @@ watch(route, () => {
             }
         })
     })
+}
+onMounted(() => {
+    handleNavActive();
+})
+// 监听路由发生了切换
+watch(route, () => {
+    handleNavActive();
 })
 
 // 导航栏元素typescript类型声明

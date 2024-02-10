@@ -15,10 +15,12 @@
                 </div>
                 <Nav></Nav>
             </div>
-            <!-- 主体页面内容容器 -->
-            <div class="page-container">
-                <RouterView></RouterView>
-            </div>
+            <el-scrollbar class="scroll-bar">
+                <!-- 主体页面内容容器 -->
+                <div class="page-container">
+                    <RouterView></RouterView>
+                </div>
+            </el-scrollbar>
             <!-- 移动端展开导航栏的时候才显示的蒙层 -->
             <div :class="{'mobile-nav-mask': true, 'expand': expand}" @click="foldNav"></div>
         </div>
@@ -42,6 +44,7 @@ const foldNav = () => {
 // 布局容器
 .layout-container {
     width: 100%;
+    height: 100%;
     background-color: #f1f3ef;
     // 头部容器
     .header-container {
@@ -74,9 +77,14 @@ const foldNav = () => {
             }
         }
         // 页面容器
-        .page-container {
-            width: calc(100% - 200px);
-            box-sizing: border-box;
+        .scroll-bar {
+            width: 100%;
+            .page-container {
+                width: 100%;
+                height: 100%;
+                box-sizing: border-box;
+                padding: 20px;
+            }
         }
     }
 }
@@ -89,6 +97,7 @@ const foldNav = () => {
             display: flex;
             width: 100%;
             align-items: center;
+            justify-content: center;
             .nav-expand-logo {
                 font-size: 28px;
                 position: absolute;
@@ -150,6 +159,7 @@ const foldNav = () => {
             display: flex;
             width: 100%;
             align-items: center;
+            justify-content: center;
             .nav-expand-logo {
                 font-size: 28px;
                 position: absolute;

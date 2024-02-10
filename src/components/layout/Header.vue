@@ -8,13 +8,13 @@
             </div>
             <!-- 营业状态 -->
             <div class="business-state">
-                营业中
+                {{ shopStatusList[shopStatus].label }}
             </div>
         </div>
         <!-- 右侧容器 -->
         <div class="right-container">
             <!-- 营业状态切换按钮 -->
-            <div class="business-state-change-btn">
+            <div class="business-state-change-btn" @click="onSwitchShopStatusBtnClick">
                 营业状态
             </div>
             <!-- 消息 -->
@@ -22,15 +22,75 @@
                 <SVGIcon icon-name="message" class="icon"></SVGIcon>
             </div>
             <!-- 商家信息 -->
-            <div class="avatar-container">
-                <div class="avatar"></div>
-                <div class="name">沙县小吃</div>
-            </div>
+            <AvatarLogin></AvatarLogin>
         </div>
     </div>
+    <el-dialog v-model="dialogSwitchShopStatus" title="设置营业状态" align-center>
+        <el-select
+            v-model="shopStatus"
+            class="m-2"
+            placeholder="请选择营业状态"
+            @change="onSelectShopStatusChange"
+        >
+            <el-option
+            v-for="item in shopStatusList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            />
+        </el-select>
+    </el-dialog>
 </template>
 <script lang="ts" setup>
 import SVGIcon from "../common/SVGIcon.vue"
+import AvatarLogin from "../common/AvatarLogin.vue"
+import { getShopStatus, setShopStatus } from "../../api/Header";
+import { ref } from "vue";
+import { ElMessage } from "element-plus";
+
+// 选择店铺营业状态弹窗是否显示
+const dialogSwitchShopStatus = ref(false);
+// 切换店铺营业状态按钮被点击了
+const onSwitchShopStatusBtnClick = () => {
+    // 显示切换营业状态弹窗
+    dialogSwitchShopStatus.value = true;
+}
+const onSelectShopStatusChange = (value: any) => {
+    setShopStatus(value).then((res) => {
+        if(res.data.code) { // code == 1 营业状态切换成功
+            ElMessage({
+                message: "营业状态切换成功",
+                type: "success"
+            })
+        } else {
+            ElMessage({
+                message: "营业状态切换失败",
+                type: "error"
+            })
+        }
+    })
+}
+
+// 当前店铺营业状态
+const shopStatus = ref(0);
+// 营业状态列表
+const shopStatusList = ref([
+    {
+        label: "已打烊",
+        value: 0
+    },
+    {
+        label: "营业中",
+        value: 1
+    }
+])
+// 获取当前店铺营业状态
+getShopStatus().then((res) => {
+    if(res.data.code) { // code == 1 获取店铺状态成功
+        const status = res.data.data; // 1营业中 0已打烊
+        shopStatus.value = status;
+    }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -38,6 +98,7 @@ import SVGIcon from "../common/SVGIcon.vue"
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 100%;
     // 左侧容器
     .left-container {
         display: flex;
@@ -65,7 +126,6 @@ import SVGIcon from "../common/SVGIcon.vue"
             justify-content: center;
             align-items: center;
             font-weight: 400;
-            cursor: pointer;
         }
     }
     // 右侧容器
@@ -110,23 +170,6 @@ import SVGIcon from "../common/SVGIcon.vue"
                 position: absolute;
                 top: 3px;
                 right: 0;
-            }
-        }
-        .avatar-container {
-            display: flex;
-            align-items: center;
-            margin-right: 52px;
-            cursor: pointer;
-            .avatar {
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                background-color: #AED7BD;
-                margin-right: 12px;
-            }
-            .name {
-                font-size: 18px;
-                font-weight: 400;
             }
         }
     }

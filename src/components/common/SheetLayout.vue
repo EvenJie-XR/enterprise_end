@@ -18,7 +18,6 @@
 <style lang="scss" scoped>
 .sheet-layout-container {
     background-color: white;
-    margin-right: 36px;
     border-radius: 10px;
     .header-container {
         height: 54px;

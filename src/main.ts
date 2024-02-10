@@ -7,16 +7,19 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import './style.scss'
 // @ts-ignore 实现element的国际化为中文
-import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+import zhCn from 'element-plus/dist/locale/zh-cn'
+import { createPinia } from 'pinia'
 
 // 批量注册element的icons
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }
+const pinia = createPinia()
 
 app
 .use(router)
+.use(pinia)
 .use(ElementPlus, { 
   locale: zhCn, // 设置element的国际化为中文
 })

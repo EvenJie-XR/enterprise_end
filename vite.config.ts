@@ -16,4 +16,13 @@ export default defineConfig({
       symbolId: "icon-[dir]-[name]",
     }),
   ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://110.41.166.41:8080',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    }
+  }
 })

@@ -102,8 +102,8 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import ModelPanel from "../components/common/ModePanel.vue"
-import Sheet from "../components/common/Sheet.vue"
+import ModelPanel from "../../components/common/ModePanel.vue"
+import Sheet from "../../components/common/Sheet.vue"
 
 // 菜品名称
 const foodName = ref();
@@ -223,7 +223,6 @@ const sheet = ref([
 
 <style lang="scss" scoped>
 .food-category-manager-container {
-    padding: 20px 20px 20px 0;
 
     .food-manager-container {
         margin-bottom: 37px;

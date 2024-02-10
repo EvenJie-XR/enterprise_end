@@ -93,12 +93,12 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="name" label="订单菜品"/>
-                    <el-table-column prop="sendState" label="派送状态"/>
+                    <el-table-column prop="sendState" label="派送状态" width="100"/>
                     <el-table-column prop="address" label="地址" />
                     <el-table-column prop="time" sortable label="预计送达时间" />
                     <el-table-column prop="money" label="实收金额" width="100" />
                     <el-table-column prop="notes" label="备注" />
-                    <el-table-column prop="control" label="操作">
+                    <el-table-column prop="control" label="操作" width="230">
                         <template #default>
                             <el-button text class="control-btn">接单</el-button>
                             <el-button text class="control-btn">拒单</el-button>
@@ -115,13 +115,13 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import ModelPanel from "../components/common/ModePanel.vue"
-import TodayDataCard from "../components/Home/TodayDataCard.vue"
-import OrderformManagerCard from "../components/Home/OrderformManagerCard.vue"
-import FoodManagerCard from "../components/Home/FoodManagerCard.vue"
-import SVGIcon from "../components/common/SVGIcon.vue"
-import SheetLayout from "../components/common/SheetLayout.vue"
-import Sheet from "../components/common/Sheet.vue"
+import ModelPanel from "../../components/common/ModePanel.vue"
+import TodayDataCard from "../../components/Home/TodayDataCard.vue"
+import OrderformManagerCard from "../../components/Home/OrderformManagerCard.vue"
+import FoodManagerCard from "../../components/Home/FoodManagerCard.vue"
+import SVGIcon from "../../components/common/SVGIcon.vue"
+import SheetLayout from "../../components/common/SheetLayout.vue"
+import Sheet from "../../components/common/Sheet.vue"
 
 // 今日数据模拟数据
 const todayDataList = ref([
@@ -228,7 +228,6 @@ const tableData = ref([
 .home-container {
     width: 100%;
     height: 100%;
-    padding-top: 28px;
     box-sizing: border-box;
     .today-data-container {
         margin-bottom: 10px;
@@ -304,7 +303,6 @@ const tableData = ref([
     }
     .sheet-container {
         height: 400px;
-        margin-bottom: 16px;
         .header-container {
             display: flex;
             align-items: center;
@@ -314,9 +312,6 @@ const tableData = ref([
             .title {
                 font-size: 24px;
                 font-weight: bold;
-            }
-            .right-tool {
-
             }
         }
         .control-btn {
@@ -335,7 +330,6 @@ const tableData = ref([
 // 手机端竖屏
 @media screen and (max-width: 768px) {
     .home-container {
-        padding: 28px;
         .today-data-card-list-container {
             flex-direction: column;
         }
@@ -356,7 +350,6 @@ const tableData = ref([
 // ipad或手机端横屏
 @media screen and (min-width: 769px) and (max-width: 1200px) {
     .home-container {
-        padding: 28px;
         .today-data-card-list-container {
             flex-direction: column;
         }
@@ -376,7 +369,6 @@ const tableData = ref([
 
 @media screen and (min-width: 1200px) and (max-width: 1690px) {
     .home-container {
-        padding: 28px 28px 28px 0;
         .orderform-manager-and-food-manager-container {
             flex-direction: column;
             .slice-line {

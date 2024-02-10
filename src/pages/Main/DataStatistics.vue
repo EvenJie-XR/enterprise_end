@@ -87,8 +87,8 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import ModelPanel from "../components/common/ModePanel.vue"
-import Chart from "../components/common/Chart.vue"
+import ModelPanel from "../../components/common/ModePanel.vue"
+import Chart from "../../components/common/Chart.vue"
 import * as echarts from 'echarts';
 
 // 选中的时间name，默认是昨天
@@ -409,7 +409,6 @@ const orderformStatisticsChartOption = ref({
 
 <style lang="scss" scoped>
 .data-statistics-page-container {
-    padding: 20px 20px 20px 0;
     // 时间选择器
     .data-statistics-container {
         .header-container {
