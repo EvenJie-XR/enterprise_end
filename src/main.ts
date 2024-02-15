@@ -9,6 +9,10 @@ import './style.scss'
 // @ts-ignore 实现element的国际化为中文
 import zhCn from 'element-plus/dist/locale/zh-cn'
 import { createPinia } from 'pinia'
+import * as dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn' // 导入本地化语言
+
+dayjs.locale('zh-cn') // 使用本地化语言
 
 // 批量注册element的icons
 const app = createApp(App);

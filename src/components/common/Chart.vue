@@ -5,7 +5,7 @@
 </template>
 <script lang="ts" setup>
 import * as echarts from 'echarts';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const chart = ref();
 const props = defineProps({
@@ -18,7 +18,13 @@ onMounted(() => {
     window.addEventListener('resize', function() {
         myChart.resize();
     });
+    // 监听外部传入的option是否更新，如果更新了就重新setOption
+    watch(() => props.chartOption, () => {
+        // @ts-ignore
+        myChart.setOption(props.chartOption);
+    })
 })
+
 </script>
 
 <style lang="scss" scoped>

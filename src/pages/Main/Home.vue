@@ -4,7 +4,7 @@
         <ModelPanel class="today-data-container">
             <template v-slot:header>
                 <div class="today-data-card-title-container">
-                    <div class="title">今日数据 / 2022.4.22 18:30</div>
+                    <div class="title">今日数据 / {{ todayDateStr }}</div>
                     <div class="more-info-btn">查看详细数据 ></div>
                 </div>
             </template>
@@ -39,8 +39,8 @@
                     <div class="food-container">
                         <!-- 菜品管理 -->
                         <div class="food-category-manager-container">
-                            <FoodManagerCard title="已起售">12</FoodManagerCard>
-                            <FoodManagerCard title="已停售">02</FoodManagerCard>
+                            <FoodManagerCard title="已启售">{{ overviewDishes.sold }}</FoodManagerCard>
+                            <FoodManagerCard title="已停售">{{ overviewDishes.discontinued }}</FoodManagerCard>
                             <FoodManagerCard title="新增菜品">
                                 <SVGIcon icon-name="add" class="icon"></SVGIcon>
                             </FoodManagerCard>
@@ -50,8 +50,8 @@
                         </div>
                         <!-- 套餐管理 -->
                         <div class="foodcombo-manager-container">
-                            <FoodManagerCard title="已起售">12</FoodManagerCard>
-                            <FoodManagerCard title="已停售">02</FoodManagerCard>
+                            <FoodManagerCard title="已启售">{{ overviewSetmeals.sold }}</FoodManagerCard>
+                            <FoodManagerCard title="已停售">{{ overviewSetmeals.discontinued }}</FoodManagerCard>
                             <FoodManagerCard title="新增菜品">
                                 <SVGIcon icon-name="add" class="icon"></SVGIcon>
                             </FoodManagerCard>
@@ -70,8 +70,7 @@
                 <div class="header-container">
                     <div class="title">订单信息</div>
                     <div class="right-tool">
-                        <el-button size="large" plain color="rgb(40, 167, 103)">待接单(12)</el-button>
-                        <el-button size="large" plain color="rgb(40, 167, 103)">待派送(10)</el-button>
+                        <OrderStatusSwitchBtn @active-change="handleOrderStatusSwitchChange"></OrderStatusSwitchBtn>
                     </div>
                 </div>
             </template>
@@ -114,7 +113,6 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
 import ModelPanel from "../../components/common/ModePanel.vue"
 import TodayDataCard from "../../components/Home/TodayDataCard.vue"
 import OrderformManagerCard from "../../components/Home/OrderformManagerCard.vue"
@@ -122,106 +120,23 @@ import FoodManagerCard from "../../components/Home/FoodManagerCard.vue"
 import SVGIcon from "../../components/common/SVGIcon.vue"
 import SheetLayout from "../../components/common/SheetLayout.vue"
 import Sheet from "../../components/common/Sheet.vue"
+import OrderStatusSwitchBtn from "../../components/Home/OrderStatusSwitchBtn.vue";
+import { useOrderInfo, useOrderManager, useOverviewDishes, useOverviewSetmeals, useTodayData } from "../../hooks/page/HomeHook"
 
-// 今日数据模拟数据
-const todayDataList = ref([
-    {
-        title: "营业额",
-        data: "200.34"
-    },
-    {
-        title: "有效订单",
-        data: "12"
-    },
-    {
-        title: "订单完成率",
-        data: "16%"
-    },
-    {
-        title: "平均客单价",
-        data: "30"
-    },
-    {
-        title: "新增用户",
-        data: "18"
-    }
-]);
+// 订单信息
+const { tableData, handleOrderStatusSwitchChange } = useOrderInfo();
 
-// 菜单套餐总览模拟数据
-const orderformDataList = ref([
-    {
-        title: "待接单",
-        data: "12",
-        backgroundColor: "#ff8000"
-    },
-    {
-        title: "待派送",
-        data: "10",
-        backgroundColor: "#ff8000"
-    },
-    {
-        title: "已完成",
-        data: "18",
-        backgroundColor: "#28A767"
-    },
-    {
-        title: "已取消",
-        data: "1",
-        backgroundColor: "#28A767"
-    },
-    {
-        title: "全部订单",
-        data: "41",
-        backgroundColor: "#28A767"
-    }
-])
+// 今日数据
+const { todayDateStr, todayDataList } = useTodayData();
 
-// 订单信息模拟数据
-const tableData = ref([
-    {
-        no: 2021010200001,
-        name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
-        sendState: "派送中",
-        address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        time: "2021-01-02 11：11：11",
-        money: "40.00",
-        notes: "不要香菜",
-    },
-    {
-        no: 2021010200001,
-        name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
-        sendState: "派送中",
-        address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        time: "2021-01-02 11：11：11",
-        money: "40.00",
-        notes: "不要香菜",
-    },
-    {
-        no: 2021010200001,
-        name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
-        sendState: "待派送",
-        address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        time: "2021-01-02 11：11：11",
-        money: "40.00",
-    },
-    {
-        no: 2021010200001,
-        name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
-        sendState: "派送中",
-        address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        time: "2021-01-02 11：11：11",
-        money: "40.00",
-    },
-    {
-        no: 2021010200001,
-        name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
-        sendState: "派送中",
-        address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        time: "2021-01-02 11：11：11",
-        money: "40.00",
-        notes: "不要香菜",
-    }
-])
+// 订单管理
+const { orderformDataList } = useOrderManager();
+
+// 菜品总览
+const { overviewDishes } = useOverviewDishes();
+
+// 套餐总览
+const { overviewSetmeals } = useOverviewSetmeals();
 </script>
 
 <style lang="scss" scoped>
