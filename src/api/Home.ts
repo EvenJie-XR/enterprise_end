@@ -1,4 +1,5 @@
 import { instance } from "."
+import { GetOrderInfoOption } from "../types/page/Home";
 
 /**
  * 获取工作台今日数据
@@ -35,6 +36,54 @@ export const getOverviewDishes = () => instance.get("/api/admin/workspace/overvi
  */
 export const getOverviewSetmeals = () => instance.get("/api/admin/workspace/overviewSetmeals");
 
-export const getPendingOrdersCount = () => {
-    
+/**
+ * 各个状态的订单数量统计
+ * @returns 
+ */
+export const getPendingOrdersCount = () => instance.get("/api/admin/order/statistics");
+
+/**
+ * 获取所有订单
+ * @returns 
+ */
+export const getOrderInfo = (option: GetOrderInfoOption) => instance.get(`/api/admin/order/conditionSearch?page=${option.page}&pageSize=${option.pageSize}&status=${option.status}`);
+
+/**
+ * 接单
+ * @param id 单号的id
+ * @returns 
+ */
+export const jieDan = (id: string) => instance.put("/api/admin/order/confirm", {id});
+
+/**
+ * 拒单
+ * @param id 单号的id
+ * @param rejectionReason 拒单原因
+ * @returns 
+ */
+export const juDan = (id: string, rejectionReason: string) => instance.put("/api/admin/order/rejection", {id, rejectionReason});
+
+/**
+ * 退单
+ * @param id 单号的id
+ * @param cancelReason 退单原因
+ * @returns 
+ */
+export const tuiDan = (id: string, cancelReason: string) => instance.put("/api/admin/order/cancel", {id, cancelReason});
+
+/**
+ * 查询订单详细信息
+ * @param id 订单id
+ * @returns 
+ */
+export const queryOrderDetailInfo = (id: string) => instance.get(`/mock/admin/order/details/${id}`);
+
+// 状态码文字map
+export const statusCodeMap = {
+    1: "待付款",
+    2: "待接单", // 接单、拒单、退单
+    3: "已接单",
+    4: "派送中",
+    5: "已完成",
+    6: "已取消"
 }

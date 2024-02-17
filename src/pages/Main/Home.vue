@@ -25,7 +25,7 @@
                     <div class="orderform-manager-card-container">
                         <OrderformManagerCard class="orderform-manager-card-item" v-for="orderformData in orderformDataList" :key="orderformData.title" :title="orderformData.title" :data="orderformData.data" :background-color="orderformData.backgroundColor"></OrderformManagerCard>
                     </div>
-                    <div class="more-info-btn">查看订单明细 ></div>
+                    <div class="more-info-btn" @click="$router.push({name: 'OrderformManager'})">查看订单明细 ></div>
                 </template>
             </ModelPanel>
             <div class="slice-line"></div>
@@ -42,9 +42,9 @@
                             <FoodManagerCard title="已启售">{{ overviewDishes.sold }}</FoodManagerCard>
                             <FoodManagerCard title="已停售">{{ overviewDishes.discontinued }}</FoodManagerCard>
                             <FoodManagerCard title="新增菜品">
-                                <SVGIcon icon-name="add" class="icon"></SVGIcon>
+                                <SVGIcon icon-name="add" class="icon" @click="$router.push({name: 'FoodCategoryManager'})"></SVGIcon>
                             </FoodManagerCard>
-                            <div class="more-info">
+                            <div class="more-info" @click="$router.push({name: 'FoodCategoryManager'})">
                                 查看菜品管理 >
                             </div>
                         </div>
@@ -52,10 +52,10 @@
                         <div class="foodcombo-manager-container">
                             <FoodManagerCard title="已启售">{{ overviewSetmeals.sold }}</FoodManagerCard>
                             <FoodManagerCard title="已停售">{{ overviewSetmeals.discontinued }}</FoodManagerCard>
-                            <FoodManagerCard title="新增菜品">
-                                <SVGIcon icon-name="add" class="icon"></SVGIcon>
+                            <FoodManagerCard title="新增套餐">
+                                <SVGIcon icon-name="add" class="icon" @click="$router.push({name: 'CategoryManager'})"></SVGIcon>
                             </FoodManagerCard>
-                            <div class="more-info">
+                            <div class="more-info" @click="$router.push({name: 'CategoryManager'})">
                                 查看套餐管理 >
                             </div>
                         </div>
@@ -77,39 +77,40 @@
             <!-- 表格数据 -->
             <template v-slot:sheet>
                 <Sheet :table-data="tableData" :pinto="true" >
-                    <el-table-column prop="no" label="订单号">
-                        <template #header="{ column }">
-                            <div class="check-box-of-column">
-                                <el-checkbox />
-                                {{ column.label }}
-                            </div>
-                        </template>
+                    <el-table-column prop="number" label="订单号" width="140"></el-table-column>
+                    <el-table-column prop="orderDishes" label="订单菜品"/>
+                    <el-table-column prop="sendState" label="派送状态" width="100">
                         <template #default="{row}">
-                            <div class="check-box-of-column">
-                                <el-checkbox />
-                                {{ row.no }}
-                            </div>
+                            {{ 
+                                // @ts-ignore
+                                statusCodeMap[row.status]
+                            }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="name" label="订单菜品"/>
-                    <el-table-column prop="sendState" label="派送状态" width="100"/>
                     <el-table-column prop="address" label="地址" />
-                    <el-table-column prop="time" sortable label="预计送达时间" />
-                    <el-table-column prop="money" label="实收金额" width="100" />
-                    <el-table-column prop="notes" label="备注" />
-                    <el-table-column prop="control" label="操作" width="230">
-                        <template #default>
-                            <el-button text class="control-btn">接单</el-button>
-                            <el-button text class="control-btn">拒单</el-button>
-                            <el-button text class="control-btn">查看</el-button>
+                    <el-table-column prop="estimatedDeliveryTime" sortable label="预计送达时间" width="160" />
+                    <el-table-column prop="amount" label="实收金额" width="100" />
+                    <el-table-column prop="remark" label="备注" />
+                    <el-table-column prop="control" label="操作" width="170">
+                        <template #default="{row}">
+                            <div class="control-container">
+                                <el-button text class="control-btn" v-show="row.status === 2" type="success" @click="onJieDanBtnClick(row)">接单</el-button>
+                                <el-button text class="control-btn" v-show="row.status === 2" type="danger" @click="onJuDanBtnClick(row)">拒单</el-button>
+                                <el-button text class="control-btn" v-show="row.status === 3" type="danger" @click="onTuiDanBtnClick(row)">退单</el-button>
+                                <el-button text class="control-btn" @click="onChaKanBtnClick(row)">查看</el-button>
+                            </div>
                         </template>
                     </el-table-column>
                 </Sheet>
             </template>
             <template #pagination>
-                <el-pagination background layout="prev, pager, next, sizes, jumper" :total="1000" />
+                <el-pagination background layout="prev, pager, next, sizes, jumper" :total="total" v-model:page-size="pageSize" v-model:current-page="currentPage" @change="onCurrentPageOrPageSizeChange" />
             </template>
         </SheetLayout>
+        <ConfirmDialog v-model="jieDanConfirmDialogVisible" tip="确认接单？" btn-text="接单" @confirm="onConfirmJieDanBtnClick" />
+        <RejectOrderDialog v-model="juDanDialogVisible" title="拒单原因" tip="拒单原因:" placeholder="请输入拒单原因..." btn="拒单" @confirm="onConfirmJuDanBtnClick" />
+        <RejectOrderDialog v-model="tuiDanDialogVisible" title="退单原因" tip="退单原因:" placeholder="请输入退单原因..." btn="退单" @confirm="onConfirmTuiDanBtnClick" />
+        <OrderInfoDialog v-model="orderInfoDialogVisible" v-model:detail="orderDetailInfo"></OrderInfoDialog>
     </div>
 </template>
 <script lang="ts" setup>
@@ -122,9 +123,32 @@ import SheetLayout from "../../components/common/SheetLayout.vue"
 import Sheet from "../../components/common/Sheet.vue"
 import OrderStatusSwitchBtn from "../../components/Home/OrderStatusSwitchBtn.vue";
 import { useOrderInfo, useOrderManager, useOverviewDishes, useOverviewSetmeals, useTodayData } from "../../hooks/page/HomeHook"
+import ConfirmDialog from "../../components/common/ConfirmDialog.vue"
+import RejectOrderDialog from "../../components/common/RejectOrderDialog.vue"
+import OrderInfoDialog from "../../components/common/OrderInfoDialog.vue"
+import { statusCodeMap } from "../../api/Home"
 
 // 订单信息
-const { tableData, handleOrderStatusSwitchChange } = useOrderInfo();
+const { 
+    tableData, 
+    handleOrderStatusSwitchChange, 
+    pageSize, 
+    currentPage, 
+    total, 
+    onCurrentPageOrPageSizeChange, 
+    jieDanConfirmDialogVisible, 
+    onJieDanBtnClick, 
+    onConfirmJieDanBtnClick, 
+    juDanDialogVisible, 
+    onJuDanBtnClick, 
+    tuiDanDialogVisible, 
+    onTuiDanBtnClick,
+    onConfirmJuDanBtnClick,
+    onConfirmTuiDanBtnClick,
+    orderInfoDialogVisible,
+    onChaKanBtnClick,
+    orderDetailInfo
+} = useOrderInfo();
 
 // 今日数据
 const { todayDateStr, todayDataList } = useTodayData();
@@ -229,8 +253,13 @@ const { overviewSetmeals } = useOverviewSetmeals();
                 font-weight: bold;
             }
         }
-        .control-btn {
-            color: #2d3478;
+        .control-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            .control-btn {
+                // color: #2d3478;
+            }
         }
         .check-box-of-column {
             display: flex;

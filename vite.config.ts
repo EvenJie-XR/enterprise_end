@@ -7,7 +7,11 @@ import path from "path";
 export default defineConfig({
   base: "/enterprise_end",
   plugins: [
-    vue(),
+    vue({
+      script: {
+        defineModel: true
+      }
+    }),
     // 使用node处理src/svgs用于实现SVGIcon组件
     createSvgIconsPlugin({
       // 指定目录
@@ -23,6 +27,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
+      '/mock': {
+        target: 'https://mock.apifox.com/m1/3616952-0-default',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/mock/, ''),
+      }
     }
   }
 })

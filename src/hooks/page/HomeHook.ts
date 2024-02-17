@@ -1,6 +1,7 @@
-import { ref } from "vue";
-import { getOrderManagerData, getOverviewDishes, getOverviewSetmeals, getTodayData } from "../../api/Home";
+import { Ref, ref } from "vue";
+import { getOrderInfo, getOrderManagerData, getOverviewDishes, getOverviewSetmeals, getTodayData, jieDan, juDan, queryOrderDetailInfo, tuiDan } from "../../api/Home";
 import * as dayjs from "dayjs"
+import { ElMessage } from "element-plus";
 
 /**
  * 今日数据
@@ -174,60 +175,185 @@ export const useOverviewSetmeals = () => {
  */
 export const useOrderInfo = () => {
     // 订单信息模拟数据
-    const tableData = ref([
-        {
-            no: 2021010200001,
-            name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
-            sendState: "派送中",
-            address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-            time: "2021-01-02 11：11：11",
-            money: "40.00",
-            notes: "不要香菜",
-        },
-        {
-            no: 2021010200001,
-            name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
-            sendState: "派送中",
-            address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-            time: "2021-01-02 11：11：11",
-            money: "40.00",
-            notes: "不要香菜",
-        },
-        {
-            no: 2021010200001,
-            name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
-            sendState: "待派送",
-            address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-            time: "2021-01-02 11：11：11",
-            money: "40.00",
-        },
-        {
-            no: 2021010200001,
-            name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
-            sendState: "派送中",
-            address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-            time: "2021-01-02 11：11：11",
-            money: "40.00",
-        },
-        {
-            no: 2021010200001,
-            name: "宫保鸡丁*1 红烧带鱼*1 农家小炒肉*2",
-            sendState: "派送中",
-            address: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-            time: "2021-01-02 11：11：11",
-            money: "40.00",
-            notes: "不要香菜",
-        }
-    ])
+    const tableData = ref([])
+    // 默认的pagesize
+    const pageSize = ref(10);
+    // 当前页数
+    const currentPage = ref(1);
+    // 确认对话框是否可视
+    const jieDanConfirmDialogVisible = ref(false);
+    // 总数
+    const total = ref(100);
+    // 当前操作的订单编号
+    const currentOrderNumber = ref("");
+    // 拒单对话框是否可视
+    const juDanDialogVisible = ref(false);
+    // 退单对话框是否可视
+    const tuiDanDialogVisible = ref(false);
+    // 订单信息对话框是否可视
+    const orderInfoDialogVisible = ref(false);
+    // 订单详细信息
+    const orderDetailInfo: Ref<any> = ref();
     /**
      * 处理订单状态选择按钮激活状态变化事件
      * @param activeName 订单状态激活状态字符串
      */
     const handleOrderStatusSwitchChange = (activeName: string) => {
         console.log("订单状态选择按钮激活状态变化了", activeName);
+        if(activeName) {
+            getNewOrderInfo(activeName === "pending-order" ? 2 : 3);
+        } else {
+            getNewOrderInfo();
+        }
+    }
+    /**
+     * 获取订单信息接口
+     */
+    const getNewOrderInfo = (status: string | number = "") => {
+        getOrderInfo({
+            page: currentPage.value,
+            pageSize: pageSize.value,
+            status
+        }).then((res) => {
+            if(res.data.code) {
+                tableData.value = res.data.data.records;
+                total.value = res.data.data.total;
+            }
+        })
+    }
+    // 获取一进来的订单信息接口
+    getNewOrderInfo();
+    /**
+     * 当currentpage或者pagesize变化的时候触发
+     */
+    const onCurrentPageOrPageSizeChange = () => {
+        getNewOrderInfo();
+    }
+    /**
+     * 接单按钮点击事件
+     * @param row 当前订单数据
+     */
+    const onJieDanBtnClick = (row: any) => {
+        jieDanConfirmDialogVisible.value = true;
+        currentOrderNumber.value = row.number;
+    }
+    /**
+     * 再次确认接单按钮点击事件
+     */
+    const onConfirmJieDanBtnClick = () => {
+        jieDan(currentOrderNumber.value).then((res) => {
+            if(res.data.code) {
+                ElMessage({
+                    message: "接单成功",
+                    type: "success"
+                });
+                jieDanConfirmDialogVisible.value = false;
+            }else {
+                ElMessage({
+                    message: "接单失败",
+                    type: "error"
+                })
+            }
+        });
+    }
+    /**
+     * 拒单按钮点击事件
+     * @param row 当前订单数据
+     */
+    const onJuDanBtnClick = (row: any) => {
+        juDanDialogVisible.value = true;
+        currentOrderNumber.value = row.number;
+    }
+    /**
+     * 再次确认拒单按钮点击事件
+     */
+    const onConfirmJuDanBtnClick = (juDanReason: string) => {
+        juDan(currentOrderNumber.value, juDanReason).then((res) => {
+            if(res.data.code) {
+                ElMessage({
+                    message: "拒单成功",
+                    type: "success"
+                })
+            } else {
+                ElMessage({
+                    message: "拒单失败",
+                    type: "error"
+                })
+            }
+        });
+    }
+    /**
+     * 退单按钮点击事件
+     * @param row 当前订单数据
+     */
+    const onTuiDanBtnClick = (row: any) => {
+        tuiDanDialogVisible.value = true;
+        currentOrderNumber.value = row.number;
+    }
+    /**
+     * 再次确认退单按钮点击事件
+     * @param tuiDanReason 退单原因
+     */
+    const onConfirmTuiDanBtnClick = (tuiDanReason: string) => {
+        tuiDan(currentOrderNumber.value, tuiDanReason).then((res) => {
+            if(res.data.code) {
+                ElMessage({
+                    message: "退单成功",
+                    type: "success"
+                })
+            } else {
+                ElMessage({
+                    message: "退单失败",
+                    type: "error"
+                })
+            }
+        });
+    }
+    /**
+     * 当查看按钮点击
+     * @param row 当前行的订单信息
+     */
+    const onChaKanBtnClick = (row: any) => {
+        orderInfoDialogVisible.value = true;
+        currentOrderNumber.value = row.number;
+        // 获取当前订单的详细信息
+        queryOrderDetailInfo(currentOrderNumber.value)
+        .then((res) => {
+            if(res.data.code) {
+                console.log(res.data.data);
+                orderDetailInfo.value = res.data.data;
+            } else {
+                ElMessage({
+                    message: "获取订单详细信息失败",
+                    type: "error"
+                })
+            }
+        })
+        .catch(() => {
+            ElMessage({
+                message: "获取订单详细信息失败",
+                type: "error"
+            })
+        })
     }
     return {
         tableData,
-        handleOrderStatusSwitchChange
+        handleOrderStatusSwitchChange,
+        pageSize,
+        currentPage,
+        total,
+        onCurrentPageOrPageSizeChange,
+        jieDanConfirmDialogVisible,
+        onJieDanBtnClick,
+        onConfirmJieDanBtnClick,
+        juDanDialogVisible,
+        onJuDanBtnClick,
+        tuiDanDialogVisible,
+        onTuiDanBtnClick,
+        onConfirmJuDanBtnClick,
+        onConfirmTuiDanBtnClick,
+        orderInfoDialogVisible,
+        onChaKanBtnClick,
+        orderDetailInfo
     }
 }

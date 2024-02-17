@@ -4,7 +4,7 @@
         <ModelPanel class="food-manager-container">
             <template #header>
                 <div class="header-container">
-                    菜品管理
+                    订单管理
                 </div>
             </template>
             <template #content>
@@ -15,11 +15,7 @@
                                 订单号:
                             </div>
                             <div class="form-value">
-                                <el-select v-model="salesStatus" filterable placeholder="请选择" size="large"
-                                    style="width: 240px">
-                                    <el-option v-for="item in salesStatusOptionList" :key="item.value" :label="item.label"
-                                        :value="item.value" />
-                                </el-select>
+                                <el-input v-model="no" size="large" placeholder="请输入订单号..." />
                             </div>
                         </div>
                         <div class="form-item">
@@ -27,11 +23,7 @@
                                 手机号:
                             </div>
                             <div class="form-value">
-                                <el-select v-model="salesStatus" filterable placeholder="请选择" size="large"
-                                    style="width: 240px">
-                                    <el-option v-for="item in salesStatusOptionList" :key="item.value" :label="item.label"
-                                        :value="item.value" />
-                                </el-select>
+                                <el-input v-model="phone" size="large" placeholder="请输入手机号..." />
                             </div>
                         </div>
                         <div class="form-item">
@@ -39,7 +31,15 @@
                                 下单时间:
                             </div>
                             <div class="form-value">
-                                <el-input v-model="foodName" placeholder="请输入菜品名称" size="large" />
+                                <el-date-picker
+                                    v-model="value"
+                                    type="daterange"
+                                    start-placeholder="开始时间"
+                                    end-placeholder="结束时间"
+                                    :default-time="defaultTime"
+                                    size="large"
+                                    style="width: 200px;"
+                                />
                             </div>
                         </div>
                     </div>
@@ -105,26 +105,17 @@ import { ref } from "vue";
 import ModelPanel from "../../components/common/ModePanel.vue"
 import Sheet from "../../components/common/Sheet.vue"
 
-// 菜品名称
-const foodName = ref();
-// 售卖状态
-const salesStatus = ref();
-// 售卖状态列表
-const salesStatusOptionList = ref([
-    {
-        label: "正在售卖",
-        value: 0
-    },
-    {
-        label: "未上架",
-        value: 1
-    }
-]);
+// 订单号
+const no = ref();
+// 手机号
+const phone = ref();
+// 下单时间
+const orderTime = ref();
 // 激活的分类名称
 const activeCategoryName = ref("allOrderForm");
 // 处理激活的分类名称切换
 const handleActiveCategoryNameChange = () => {
-
+    console.log(activeCategoryName.value);
 }
 
 const sheet = ref([

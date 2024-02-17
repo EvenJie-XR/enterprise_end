@@ -5,19 +5,20 @@
                 active: isActivedPendingOrder === 'pending-order'
             }" 
             @click="handleActive('pending-order')">
-            待接单(12)
+            待接单({{ pendingOrdersCount }})
         </div>
         <div 
             :class="{
                 active: isActivedPendingOrder === 'to-be-delivered'
             }" 
             @click="handleActive('to-be-delivered')">
-            待派送(10)
+            待派送({{ toBeDeliveredCount }})
         </div>
     </div>
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { getPendingOrdersCount } from '../../api/Home';
 
 const emit = defineEmits<{
     activeChange: [activeName: string] // 具名元组语法
@@ -43,6 +44,21 @@ const handleActive = (activeName: string) => {
     // 触发激活更改事件
     emit("activeChange", isActivedPendingOrder.value);
 }
+
+// 待接单数量
+const pendingOrdersCount = ref(12);
+// 待派送数量
+const toBeDeliveredCount = ref(10);
+
+getPendingOrdersCount().then((res) => {
+    if(res.data.code) { // code == 1 获取各个状态的订单数量统计成功
+        const data = res.data.data;
+        // 待接单数量
+        pendingOrdersCount.value = data.toBeConfirmed;
+        // 待派送数量
+        toBeDeliveredCount.value = data.confirmed;
+    }
+})
 </script>
 
 <style lang="scss" scoped>
