@@ -96,7 +96,7 @@
                             <div class="control-container">
                                 <el-button text class="control-btn" v-show="row.status === 2" type="success" @click="onJieDanBtnClick(row)">接单</el-button>
                                 <el-button text class="control-btn" v-show="row.status === 2" type="danger" @click="onJuDanBtnClick(row)">拒单</el-button>
-                                <el-button text class="control-btn" v-show="row.status === 3" type="danger" @click="onTuiDanBtnClick(row)">退单</el-button>
+                                <el-button text class="control-btn" v-show="row.status === 3" type="danger" @click="onTuiDanBtnClick(row)">取消</el-button>
                                 <el-button text class="control-btn" @click="onChaKanBtnClick(row)">查看</el-button>
                             </div>
                         </template>

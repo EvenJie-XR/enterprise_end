@@ -185,7 +185,7 @@ export const useOrderInfo = () => {
     // 总数
     const total = ref(100);
     // 当前操作的订单编号
-    const currentOrderNumber = ref("");
+    const currentRow: Ref<any> = ref();
     // 拒单对话框是否可视
     const juDanDialogVisible = ref(false);
     // 退单对话框是否可视
@@ -235,19 +235,20 @@ export const useOrderInfo = () => {
      */
     const onJieDanBtnClick = (row: any) => {
         jieDanConfirmDialogVisible.value = true;
-        currentOrderNumber.value = row.number;
+        currentRow.value = row;
     }
     /**
      * 再次确认接单按钮点击事件
      */
     const onConfirmJieDanBtnClick = () => {
-        jieDan(currentOrderNumber.value).then((res) => {
+        jieDan(currentRow.value.id).then((res) => {
             if(res.data.code) {
                 ElMessage({
                     message: "接单成功",
                     type: "success"
                 });
                 jieDanConfirmDialogVisible.value = false;
+                getNewOrderInfo();
             }else {
                 ElMessage({
                     message: "接单失败",
@@ -262,18 +263,20 @@ export const useOrderInfo = () => {
      */
     const onJuDanBtnClick = (row: any) => {
         juDanDialogVisible.value = true;
-        currentOrderNumber.value = row.number;
+        currentRow.value = row;
     }
     /**
      * 再次确认拒单按钮点击事件
      */
     const onConfirmJuDanBtnClick = (juDanReason: string) => {
-        juDan(currentOrderNumber.value, juDanReason).then((res) => {
+        juDan(currentRow.value.id, juDanReason).then((res) => {
             if(res.data.code) {
                 ElMessage({
                     message: "拒单成功",
                     type: "success"
                 })
+                juDanDialogVisible.value = false;
+                getNewOrderInfo();
             } else {
                 ElMessage({
                     message: "拒单失败",
@@ -288,19 +291,21 @@ export const useOrderInfo = () => {
      */
     const onTuiDanBtnClick = (row: any) => {
         tuiDanDialogVisible.value = true;
-        currentOrderNumber.value = row.number;
+        currentRow.value = row;
     }
     /**
      * 再次确认退单按钮点击事件
      * @param tuiDanReason 退单原因
      */
     const onConfirmTuiDanBtnClick = (tuiDanReason: string) => {
-        tuiDan(currentOrderNumber.value, tuiDanReason).then((res) => {
+        tuiDan(currentRow.value.id, tuiDanReason).then((res) => {
             if(res.data.code) {
                 ElMessage({
                     message: "退单成功",
                     type: "success"
                 })
+                tuiDanDialogVisible.value = false;
+                getNewOrderInfo();
             } else {
                 ElMessage({
                     message: "退单失败",
@@ -315,9 +320,9 @@ export const useOrderInfo = () => {
      */
     const onChaKanBtnClick = (row: any) => {
         orderInfoDialogVisible.value = true;
-        currentOrderNumber.value = row.number;
+        currentRow.value = row;
         // 获取当前订单的详细信息
-        queryOrderDetailInfo(currentOrderNumber.value)
+        queryOrderDetailInfo(currentRow.value.id)
         .then((res) => {
             if(res.data.code) {
                 console.log(res.data.data);

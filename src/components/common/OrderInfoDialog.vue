@@ -59,7 +59,7 @@
                             {{ dishes.name }}
                         </div>
                         <div class="amount-right">
-                            <span>*1</span>
+                            <span>*{{ dishes.number }}</span>
                             <span>{{ dishes.amount }}元</span>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                     </div>
                     <div class="order-other-info-item">
                         <div class="key-left">合计</div>
-                        <div class="amount-right" style="font-weight: bold;">174.00元</div>
+                        <div class="amount-right" style="font-weight: bold;">{{ detail?.amount }}元</div>
                     </div>
                 </div>
             </el-card>

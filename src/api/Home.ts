@@ -1,5 +1,5 @@
 import { instance } from "."
-import { GetOrderInfoOption } from "../types/page/Home";
+import { GetOrderInfoOption } from "../types/page/HomeTypes";
 
 /**
  * 获取工作台今日数据
@@ -76,7 +76,7 @@ export const tuiDan = (id: string, cancelReason: string) => instance.put("/api/a
  * @param id 订单id
  * @returns 
  */
-export const queryOrderDetailInfo = (id: string) => instance.get(`/mock/admin/order/details/${id}`);
+export const queryOrderDetailInfo = (id: string) => instance.get(`/api/admin/order/details/${id}`);
 
 // 状态码文字map
 export const statusCodeMap = {

@@ -15,7 +15,7 @@
                                 订单号:
                             </div>
                             <div class="form-value">
-                                <el-input v-model="no" size="large" placeholder="请输入订单号..." />
+                                <el-input v-model="no" size="large" placeholder="请输入订单号..." clearable />
                             </div>
                         </div>
                         <div class="form-item">
@@ -23,7 +23,7 @@
                                 手机号:
                             </div>
                             <div class="form-value">
-                                <el-input v-model="phone" size="large" placeholder="请输入手机号..." />
+                                <el-input v-model="phone" size="large" placeholder="请输入手机号..." clearable />
                             </div>
                         </div>
                         <div class="form-item">
@@ -32,19 +32,21 @@
                             </div>
                             <div class="form-value">
                                 <el-date-picker
-                                    v-model="value"
-                                    type="daterange"
+                                    v-model="orderTime"
+                                    type="datetimerange"
                                     start-placeholder="开始时间"
                                     end-placeholder="结束时间"
-                                    :default-time="defaultTime"
                                     size="large"
-                                    style="width: 200px;"
+                                    format="YYYY-MM-DD HH:mm:ss"
+                                    date-format="YYYY-MM-DD"
+                                    time-format="hh:mm:ss"
+                                    style="width: 240px;"
                                 />
                             </div>
                         </div>
                     </div>
-                    <el-button color="#389E79" class="search-btn" size="large">查询</el-button>
-                    <el-button class="search-btn" size="large">重置</el-button>
+                    <el-button color="#389E79" class="search-btn" size="large" @click="updateTableData">查询</el-button>
+                    <el-button class="search-btn" size="large" @click="reset">重置</el-button>
                 </div>
             </template>
         </ModelPanel>
@@ -53,163 +55,81 @@
             <template #header>
                 <div class="header-container">
                     <el-tabs v-model="activeCategoryName" class="category-tabs" @tab-change="handleActiveCategoryNameChange">
-                        <el-tab-pane label="全部订单" name="allOrderForm"></el-tab-pane>
-                        <el-tab-pane label="待接单" name="pendingOrders"></el-tab-pane>
-                        <el-tab-pane label="待派送" name="toBeDelivered"></el-tab-pane>
-                        <el-tab-pane label="派送中" name="Delivering"></el-tab-pane>
-                        <el-tab-pane label="已完成" name="done"></el-tab-pane>
-                        <el-tab-pane label="已取消" name="canceled"></el-tab-pane>
+                        <el-tab-pane label="全部订单" :name="0"></el-tab-pane>
+                        <el-tab-pane label="待付款" :name="1"></el-tab-pane>
+                        <el-tab-pane label="待接单" :name="2"></el-tab-pane>
+                        <el-tab-pane label="已接单" :name="3"></el-tab-pane>
+                        <el-tab-pane label="派送中" :name="4"></el-tab-pane>
+                        <el-tab-pane label="已完成" :name="5"></el-tab-pane>
+                        <el-tab-pane label="已取消" :name="6"></el-tab-pane>
                     </el-tabs>
                 </div>
             </template>
             <template #content>
                 <div class="content-container">
-                    <Sheet class="sheet-container" :pinto="true" :table-data="sheet" height="500px">
-                        <el-table-column prop="no" label="订单号">
-                            <template #header="{ column }">
-                                <div class="check-box-of-column">
-                                    <el-checkbox class="checkbox" />
-                                    {{ column.label }}
-                                </div>
-                            </template>
-                            <template #default="{ row }">
-                                <div class="check-box-of-column">
-                                    <el-checkbox class="checkbox" />
-                                    {{ row.no }}
-                                </div>
+                    <Sheet class="sheet-container" tooltip-effect :pinto="true" :table-data="tableData" height="500px">
+                        <el-table-column prop="number" label="订单号" />
+                        <el-table-column prop="orderDishes" label="订单菜品" />
+                        <el-table-column prop="username" label="订单状态">
+                            <template #default="{row}">
+                                {{ 
+                                    // @ts-ignore
+                                    statusCodeMap[row.status]
+                                }}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="username" label="用户名" />
-                        <el-table-column prop="phoneNumber" label="手机号" />
-                        <el-table-column prop="addresss" label="地址" />
-                        <el-table-column prop="completeTime" sortable label="送达时间" />
-                        <el-table-column prop="price" label="实收金额" />
-                        <el-table-column prop="notes" label="备注" />
-                        <el-table-column prop="control" label="操作">
-                            <template #default>
-                                <el-button text class="control-btn">退单</el-button>
-                                <el-button text class="control-btn">查看</el-button>
+                        <el-table-column prop="userName" label="用户名" />
+                        <el-table-column prop="phone" label="手机号" />
+                        <el-table-column prop="address" label="地址" />
+                        <el-table-column prop="orderTime" sortable label="下单时间" />
+                        <el-table-column prop="amount" label="实收金额">
+                            <template #default="{row}">
+                                {{ 
+                                    // @ts-ignore
+                                    "￥" + row.amount
+                                }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="remark" label="备注" />
+                        <el-table-column label="操作">
+                            <template #default="{row}">
+                                <div class="control-container">
+                                    <el-button text class="control-btn" type="success" @click="onTableJieDanBtnClick(row)" v-if="row.status === 2">接单</el-button>
+                                    <el-button text class="control-btn" type="danger" v-if="row.status === 2" @click="onTableJuDanBtnClick(row)">拒单</el-button>
+                                    <el-button text class="control-btn" type="danger" v-if="row.status === 3" @click="onTableCancelBtnClick(row)">取消</el-button>
+                                    <el-button text class="control-btn" @click="onTableViewDeatilBtnClick(row)">查看</el-button>
+                                </div>
                             </template>
                         </el-table-column>
                     </Sheet>
                     <div class="pagination-container">
-                        <el-pagination background layout="prev, pager, next, sizes, jumper" :total="1000" />
+                        <el-pagination background layout="prev, pager, next, sizes, jumper" :total="total" v-model:page-size="pageSize" v-model:current-page="currentPage" @change="onPaginationChange" />
                     </div>
                 </div>
             </template>
         </ModelPanel>
     </div>
+    <ConfirmDialog v-model="jieDanConfirmDialogVisible" tip="确定接单?" btn-text="接单" @confirm="onJieDanConfirmBtnClick" />
+    <RejectOrderDialog v-model="juDanConfirmDialogVisible" title="拒单原因" tip="拒单原因" placeholder="请输入拒单原因..." btn="拒单" @confirm="onJuDanConfirmBtnClick" />
+    <RejectOrderDialog v-model="cancelConfirmDialogVisible" title="取消原因" tip="取消原因" placeholder="请输入取消原因..." btn="取消订单" @confirm="onCancelConfirmBtnClick"/>
+    <OrderInfoDialog v-model="viewDetailConfirmDialogVisible" :detail="detailOrderInfo" />
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
+import { statusCodeMap } from "../../api/Home";
 import ModelPanel from "../../components/common/ModePanel.vue"
 import Sheet from "../../components/common/Sheet.vue"
+import { useOrderformManager } from "../../hooks/page/OrderformManagerHook";
+import ConfirmDialog from "../../components/common/ConfirmDialog.vue";
+import RejectOrderDialog from "../../components/common/RejectOrderDialog.vue";
+import OrderInfoDialog from "../../components/common/OrderInfoDialog.vue";
 
-// 订单号
-const no = ref();
-// 手机号
-const phone = ref();
-// 下单时间
-const orderTime = ref();
-// 激活的分类名称
-const activeCategoryName = ref("allOrderForm");
-// 处理激活的分类名称切换
-const handleActiveCategoryNameChange = () => {
-    console.log(activeCategoryName.value);
-}
-
-const sheet = ref([
-    {
-        no: "2021010200001",
-        username: "播仔",
-        phoneNumber: "13989490901",
-        addresss: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        completeTime: "2021-01-02 11：11",
-        price: "40.00",
-        notes: "多加韭菜"
-    },
-    {
-        no: "2021010200001",
-        username: "播仔",
-        phoneNumber: "13989490901",
-        addresss: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        completeTime: "2021-01-02 11：11",
-        price: "40.00",
-        notes: "多加韭菜"
-    },
-    {
-        no: "2021010200001",
-        username: "播仔",
-        phoneNumber: "13989490901",
-        addresss: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        completeTime: "2021-01-02 11：11",
-        price: "40.00",
-        notes: "多加韭菜"
-    },
-    {
-        no: "2021010200001",
-        username: "播仔",
-        phoneNumber: "13989490901",
-        addresss: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        completeTime: "2021-01-02 11：11",
-        price: "40.00",
-        notes: "多加韭菜"
-    },
-    {
-        no: "2021010200001",
-        username: "播仔",
-        phoneNumber: "13989490901",
-        addresss: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        completeTime: "2021-01-02 11：11",
-        price: "40.00",
-        notes: "多加韭菜"
-    },
-    {
-        no: "2021010200001",
-        username: "播仔",
-        phoneNumber: "13989490901",
-        addresss: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        completeTime: "2021-01-02 11：11",
-        price: "40.00",
-        notes: "多加韭菜"
-    },
-    {
-        no: "2021010200001",
-        username: "播仔",
-        phoneNumber: "13989490901",
-        addresss: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        completeTime: "2021-01-02 11：11",
-        price: "40.00",
-        notes: "多加韭菜"
-    },
-    {
-        no: "2021010200001",
-        username: "播仔",
-        phoneNumber: "13989490901",
-        addresss: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        completeTime: "2021-01-02 11：11",
-        price: "40.00",
-        notes: "多加韭菜"
-    },
-    {
-        no: "2021010200001",
-        username: "播仔",
-        phoneNumber: "13989490901",
-        addresss: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        completeTime: "2021-01-02 11：11",
-        price: "40.00",
-        notes: "多加韭菜"
-    },
-    {
-        no: "2021010200001",
-        username: "播仔",
-        phoneNumber: "13989490901",
-        addresss: "金燕楼办公楼（建材城西路九号）四层--宾馆北侧办公室",
-        completeTime: "2021-01-02 11：11",
-        price: "40.00",
-        notes: "多加韭菜"
-    }
-])
+const { 
+    tableData, jieDanConfirmDialogVisible, onTableJieDanBtnClick, onJieDanConfirmBtnClick, juDanConfirmDialogVisible, onTableJuDanBtnClick, cancelConfirmDialogVisible, onTableCancelBtnClick, viewDetailConfirmDialogVisible, onTableViewDeatilBtnClick, detailOrderInfo, // 表格部分
+    no, phone, orderTime, reset, // 查询订单部分
+    activeCategoryName, handleActiveCategoryNameChange, // 订单状态选择部分
+    currentPage, pageSize, total, // 分页部分
+    updateTableData, onPaginationChange, onJuDanConfirmBtnClick, onCancelConfirmBtnClick // 一些全局的方法
+} = useOrderformManager();
 </script>
 
 <style lang="scss" scoped>
@@ -300,9 +220,12 @@ const sheet = ref([
                         margin-right: 10px;
                     }
                 }
-
-                .control-btn {
-                    color: #0F1865;
+                .control-container {
+                    display: flex;
+                    flex-wrap: wrap;
+                    .el-button+.el-button {
+                        margin: 0;
+                    }
                 }
             }
         }
