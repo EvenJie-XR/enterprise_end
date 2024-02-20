@@ -7,7 +7,11 @@
                 <SVGIcon icon-name="logo" class="icon"></SVGIcon>
             </div>
             <!-- 营业状态 -->
-            <div class="business-state">
+            <div :class="{
+                'business-state': true,
+                'closed': shopStatusList[shopStatus].label === '已打烊'
+                }
+            ">
                 {{ shopStatusList[shopStatus].label }}
             </div>
         </div>
@@ -126,6 +130,9 @@ getShopStatus().then((res) => {
             justify-content: center;
             align-items: center;
             font-weight: 400;
+            &.closed {
+                background-color: #d3d4d4;
+            }
         }
     }
     // 右侧容器

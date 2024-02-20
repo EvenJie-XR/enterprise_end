@@ -1,5 +1,5 @@
 import { Ref, ref } from "vue";
-import { getOrderInfo, getOrderManagerData, getOverviewDishes, getOverviewSetmeals, getTodayData, jieDan, juDan, queryOrderDetailInfo, tuiDan } from "../../api/Home";
+import { getOrderInfo, getOrderManagerData, getOverviewDishes, getOverviewSetmeals, getPendingOrdersCount, getTodayData, jieDan, juDan, queryOrderDetailInfo, tuiDan } from "../../api/Home";
 import * as dayjs from "dayjs"
 import { ElMessage } from "element-plus";
 
@@ -194,6 +194,10 @@ export const useOrderInfo = () => {
     const orderInfoDialogVisible = ref(false);
     // 订单详细信息
     const orderDetailInfo: Ref<any> = ref();
+    // 待接单数量
+    const pendingOrdersCount = ref(0);
+    // 待派送数量
+    const toBeDeliveredCount = ref(0);
     /**
      * 处理订单状态选择按钮激活状态变化事件
      * @param activeName 订单状态激活状态字符串
@@ -218,6 +222,15 @@ export const useOrderInfo = () => {
             if(res.data.code) {
                 tableData.value = res.data.data.records;
                 total.value = res.data.data.total;
+            }
+        })
+        getPendingOrdersCount().then((res) => {
+            if(res.data.code) { // code == 1 获取各个状态的订单数量统计成功
+                const data = res.data.data;
+                // 待接单数量
+                pendingOrdersCount.value = data.toBeConfirmed;
+                // 待派送数量
+                toBeDeliveredCount.value = data.confirmed;
             }
         })
     }
@@ -359,6 +372,8 @@ export const useOrderInfo = () => {
         onConfirmTuiDanBtnClick,
         orderInfoDialogVisible,
         onChaKanBtnClick,
-        orderDetailInfo
+        orderDetailInfo,
+        pendingOrdersCount,
+        toBeDeliveredCount
     }
 }

@@ -32,7 +32,7 @@
             <!-- 菜品总览 -->
             <ModelPanel class="food-manager-panel">
                 <template v-slot:header>
-                    菜品/套餐总览
+                    菜品总览
                 </template>
                 <template v-slot:content>
                     <!-- 总容器 -->
@@ -48,17 +48,6 @@
                                 查看菜品管理 >
                             </div>
                         </div>
-                        <!-- 套餐管理 -->
-                        <div class="foodcombo-manager-container">
-                            <FoodManagerCard title="已启售">{{ overviewSetmeals.sold }}</FoodManagerCard>
-                            <FoodManagerCard title="已停售">{{ overviewSetmeals.discontinued }}</FoodManagerCard>
-                            <FoodManagerCard title="新增套餐">
-                                <SVGIcon icon-name="add" class="icon" @click="$router.push({name: 'CategoryManager'})"></SVGIcon>
-                            </FoodManagerCard>
-                            <div class="more-info" @click="$router.push({name: 'CategoryManager'})">
-                                查看套餐管理 >
-                            </div>
-                        </div>
                     </div>
                 </template>
             </ModelPanel>
@@ -70,7 +59,7 @@
                 <div class="header-container">
                     <div class="title">订单信息</div>
                     <div class="right-tool">
-                        <OrderStatusSwitchBtn @active-change="handleOrderStatusSwitchChange"></OrderStatusSwitchBtn>
+                        <OrderStatusSwitchBtn @active-change="handleOrderStatusSwitchChange" :pending-orders-count="pendingOrdersCount" :to-be-delivered-count="toBeDeliveredCount"></OrderStatusSwitchBtn>
                     </div>
                 </div>
             </template>
@@ -104,12 +93,12 @@
                 </Sheet>
             </template>
             <template #pagination>
-                <el-pagination background layout="prev, pager, next, sizes, jumper" :total="total" v-model:page-size="pageSize" v-model:current-page="currentPage" @change="onCurrentPageOrPageSizeChange" />
+                <el-pagination background layout="total, prev, pager, next, sizes, jumper" :total="total" v-model:page-size="pageSize" v-model:current-page="currentPage" @change="onCurrentPageOrPageSizeChange" />
             </template>
         </SheetLayout>
         <ConfirmDialog v-model="jieDanConfirmDialogVisible" tip="确认接单？" btn-text="接单" @confirm="onConfirmJieDanBtnClick" />
         <RejectOrderDialog v-model="juDanDialogVisible" title="拒单原因" tip="拒单原因:" placeholder="请输入拒单原因..." btn="拒单" @confirm="onConfirmJuDanBtnClick" />
-        <RejectOrderDialog v-model="tuiDanDialogVisible" title="退单原因" tip="退单原因:" placeholder="请输入退单原因..." btn="退单" @confirm="onConfirmTuiDanBtnClick" />
+        <RejectOrderDialog v-model="tuiDanDialogVisible" title="取消原因" tip="取消原因:" placeholder="请输入取消原因..." btn="取消" @confirm="onConfirmTuiDanBtnClick" />
         <OrderInfoDialog v-model="orderInfoDialogVisible" v-model:detail="orderDetailInfo"></OrderInfoDialog>
     </div>
 </template>
@@ -147,7 +136,9 @@ const {
     onConfirmTuiDanBtnClick,
     orderInfoDialogVisible,
     onChaKanBtnClick,
-    orderDetailInfo
+    orderDetailInfo,
+    pendingOrdersCount,
+    toBeDeliveredCount
 } = useOrderInfo();
 
 // 今日数据

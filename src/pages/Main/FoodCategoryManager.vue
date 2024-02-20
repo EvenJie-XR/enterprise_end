@@ -12,7 +12,7 @@
                     <div class="form-contianer">
                         <div class="form-item">
                             <div class="form-key">
-                                菜单名称:
+                                菜品名称:
                             </div>
                             <div class="form-value">
                                 <el-input v-model="foodName" placeholder="请输入菜品名称" size="large" />
@@ -20,10 +20,25 @@
                         </div>
                         <div class="form-item">
                             <div class="form-key">
-                                菜单分类:
+                                菜品分类:
                             </div>
                             <div class="form-value">
-                                <el-input v-model="foodCategoryName" placeholder="请输入菜品分类" size="large" />
+                                <el-select
+                                    v-model="foodCategoryId"
+                                    filterable
+                                    clearable
+                                    class="m-2"
+                                    placeholder="请选择分类"
+                                    size="large"
+                                    style="width: 240px"
+                                >
+                                    <el-option
+                                    v-for="item in foodCategoryIdOptions"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"
+                                    />
+                                </el-select>
                             </div>
                         </div>
                         <div class="form-item">
@@ -34,12 +49,13 @@
                                 <el-select
                                     v-model="salesStatus"
                                     filterable
-                                    placeholder="请选择"
+                                    clearable
+                                    placeholder="请选择售卖状态"
                                     size="large"
                                     style="width: 240px"
                                 >
                                     <el-option
-                                    v-for="item in salesStatusOptionList"
+                                    v-for="item in salesOptions"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value"
@@ -48,7 +64,7 @@
                             </div>
                         </div>
                     </div>
-                    <el-button color="#389E79" class="search-btn" size="large">搜索</el-button>
+                    <el-button color="#389E79" class="search-btn" size="large" @click="updateTableData">搜索</el-button>
                 </div>
             </template>
         </ModelPanel>
@@ -56,28 +72,16 @@
         <ModelPanel class="data-sheet-container">
             <template #header>
                 <div class="header-container">
-                    <el-button color="#389E79" size="large" class="btn">批量删除</el-button>
-                    <el-button color="#389E79" size="large" class="btn">新建菜品</el-button>
+                    <el-button color="#389E79" size="large" class="btn" @click="onBatchDeleteFoodBtnClick">批量删除</el-button>
+                    <el-button color="#389E79" size="large" class="btn" @click="newFoodBtnClick">新建菜品</el-button>
                 </div>
             </template>
             <template #content>
                 <div class="content-container">
-                    <Sheet class="sheet-container" :pinto="false" :table-data="sheet" height="500px">
-                        <el-table-column prop="name" label="菜品名称">
-                            <template #header="{ column }">
-                                <div class="check-box-of-column">
-                                    <el-checkbox class="checkbox" />
-                                    {{ column.label }}
-                                </div>
-                            </template>
-                            <template #default="{row}">
-                                <div class="check-box-of-column">
-                                    <el-checkbox class="checkbox" />
-                                    {{ row.name }}
-                                </div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="image" label="图片" width="140px">
+                    <Sheet class="sheet-container" :pinto="false" :table-data="tableData" height="500px" @selection-change="onSelectionChange">
+                        <el-table-column type="selection" width="55" />
+                        <el-table-column prop="name" label="菜品名称" />
+                        <el-table-column prop="image" label="图片">
                             <template #default="{ row }">
                                 <div style="display: flex; align-items: center">
                                     <el-image 
@@ -90,132 +94,89 @@
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="category" label="商品分类" width="140px" />
-                        <el-table-column prop="price" label="售价" width="140px" />
-                        <el-table-column prop="salesStatus" label="售卖状态" width="100px" />
-                        <el-table-column prop="theEndControlTime" sortable label="最后操作时间" />
-                        <el-table-column prop="control" label="操作">
-                            <template #default>
-                                <el-button text class="control-btn">接单</el-button>
-                                <el-button text class="control-btn">拒单</el-button>
-                                <el-button text class="control-btn">查看</el-button>
+                        <el-table-column prop="category" label="商品分类">
+                            <template #default="{row}">
+                                {{ categoryIdAndCategoryMap[row.categoryId] }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="price" label="售价">
+                            <template #default="{row}">
+                                ￥{{ row.price }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="salesStatus" label="售卖状态">
+                            <template #default="{row}">
+                                {{ row.status ? "正在售卖" : "未上架" }}
+                            </template>    
+                        </el-table-column>
+                        <el-table-column prop="updateTime" sortable label="最后操作时间" />
+                        <el-table-column prop="control" label="操作" width="300">
+                            <template #default="{row}">
+                                <el-button text class="control-btn" type="success" @click="editFoodBtnClick(row)">修改</el-button>
+                                <el-button text class="control-btn" type="danger" @click="onDeleteSalesBtnClick(row)">删除</el-button>
+                                <el-button text class="control-btn" type="danger" v-if="row.status" @click="onHaltTheSalesBtnClick(row)">停售</el-button>
+                                <el-button text class="control-btn" type="success" v-if="!row.status" @click="onStartSalesBtnClick(row)">启售</el-button>
                             </template>
                         </el-table-column>
                     </Sheet>
                     <div class="pagination-container">
-                        <el-pagination background layout="total, prev, pager, next" :total="1000" />
+                        <el-pagination background layout="total, prev, pager, next, sizes, jumper" :total="total" v-model:current-page="currentPage" v-model:page-size="pageSize" @change="updateTableData" />
                     </div>
                 </div>
             </template>
         </ModelPanel>
     </div>
+    <ConfirmDialog v-model="haltTheSalesConfirmDialogVisible" tip="确定停售该商品吗？" btn-text="停售" @confirm="onHaltTheSalesConfirmBtnClick" />
+    <ConfirmDialog v-model="startSalesConfirmDialogVisible" tip="确定启售该商品吗？" btn-text="启售" @confirm="onStartSalesConfirmBtnClick" />
+    <ConfirmDialog v-model="deleteSalesConfirmDialogVisible" tip="确定删除该商品吗？" btn-text="删除" @confirm="onDeleteSalesConfirmBtnClick" />
+    <AddFoodDialog v-model="AddFoodDialogVisible" @added="onAddFoodAdded" />
+    <EditFoodDialog v-model="editFoodDialogVisible" :food="currentRow" @saved="onEditFoodSaved" />
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
 import ModelPanel from "../../components/common/ModePanel.vue"
 import Sheet from "../../components/common/Sheet.vue"
-import YuXiangRouSiImage from "../../assets/YuXiangRouSi.jpg"
+import { useFoodManager } from "../../hooks/page/FoodManager";
+import ConfirmDialog from "../../components/common/ConfirmDialog.vue";
+import AddFoodDialog from "../../components/FoodManager/AddFoodDialog.vue"
+import EditFoodDialog from "../../components/FoodManager/EditFoodDialog.vue";
 
-// 菜品名称
-const foodName = ref();
-// 菜品分类名称
-const foodCategoryName = ref();
-// 售卖状态
-const salesStatus = ref();
-// 售卖状态列表
-const salesStatusOptionList = ref([
-    {
-        label: "正在售卖",
-        value: 0
-    },
-    {
-        label: "未上架",
-        value: 1
-    }
-]);
+const {
+    // search
+    foodName,
+    foodCategoryId,
+    foodCategoryIdOptions,
+    salesStatus,
+    salesOptions,
+    categoryIdAndCategoryMap,
 
-const sheet = ref([
-    {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
-    },
-    {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
-    },
-    {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
-    },
-    {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
-    },
-    {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
-    },
-    {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
-    },
-    {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
-    },
-    {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
-    },
-    {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
-    },
-    {
-        name: "鱼香肉丝",
-        image: YuXiangRouSiImage,
-        category: "荤菜",
-        price: "20.00元",
-        salesStatus: "启售",
-        theEndControlTime: "2021-01-02 11：11",
-    }
-])
+    // table
+    tableData,
+    onSelectionChange,
+    haltTheSalesConfirmDialogVisible,
+    onHaltTheSalesBtnClick,
+    onStartSalesBtnClick,
+    startSalesConfirmDialogVisible,
+    deleteSalesConfirmDialogVisible,
+    onDeleteSalesBtnClick,
+    onDeleteSalesConfirmBtnClick,
+    AddFoodDialogVisible,
+    newFoodBtnClick,
+    editFoodDialogVisible,
+    editFoodBtnClick,
+    currentRow,
+
+    currentPage,
+    pageSize,
+    total,
+
+    // 总方法
+    updateTableData,
+    onBatchDeleteFoodBtnClick,
+    onHaltTheSalesConfirmBtnClick,
+    onStartSalesConfirmBtnClick,
+    onAddFoodAdded,
+    onEditFoodSaved
+} = useFoodManager();
 </script>
 
 <style lang="scss" scoped>
@@ -284,13 +245,12 @@ const sheet = ref([
                     }
                 }
                 .control-btn {
-                    color: #0F1865;
                 }
             }
         }
         .pagination-container {
             display: flex;
-            justify-content: flex-end;
+            justify-content: center;
         }
     }
 }

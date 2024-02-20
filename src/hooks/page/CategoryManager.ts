@@ -136,7 +136,6 @@ export const useCategoryManager = () => {
      * 删除确认按钮click事件
      */
     const onDeleteConfirmBtnClick = () => {
-        console.log(currentRow.value);
         deleteCategory(currentRow.value.id).then((res) => {
             if(res.data.code) {
                 ElMessage({
@@ -147,7 +146,7 @@ export const useCategoryManager = () => {
                 updateCategoryTableData();
             } else {
                 ElMessage({
-                    message: "删除分类失败",
+                    message: "删除分类失败，有已绑定菜品，请先处理已绑定菜品",
                     type: "error"
                 })
             }

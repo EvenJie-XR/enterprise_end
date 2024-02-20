@@ -103,7 +103,7 @@
                         </el-table-column>
                     </Sheet>
                     <div class="pagination-container">
-                        <el-pagination background layout="prev, pager, next, sizes, jumper" :total="total" v-model:page-size="pageSize" v-model:current-page="currentPage" @change="onPaginationChange" />
+                        <el-pagination background layout="total, prev, pager, next, sizes, jumper" :total="total" v-model:page-size="pageSize" v-model:current-page="currentPage" @change="onPaginationChange" />
                     </div>
                 </div>
             </template>

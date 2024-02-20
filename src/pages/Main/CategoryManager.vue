@@ -33,6 +33,7 @@
             <template #content>
                 <div class="content-container">
                     <Sheet class="sheet-container" :pinto="false" :table-data="tableData" height="500px">
+                        <el-table-column prop="id" label="分类ID" />
                         <el-table-column prop="name" label="分类名称" />
                         <el-table-column prop="sort" sortable label="排序" />
                         <el-table-column prop="status" label="状态">
@@ -42,7 +43,7 @@
                         </el-table-column>
                         <el-table-column prop="updateTime" sortable label="最近操作时间" />
                         <el-table-column prop="createTime" sortable label="创建时间" />
-                        <el-table-column prop="control" label="操作">
+                        <el-table-column prop="control" label="操作" width="260">
                             <template #default="{row}">
                                 <el-button text class="control-btn" type="success" @click="onSetBtnClick(row)">修改</el-button>
                                 <el-button text class="control-btn" type="danger" @click="onDeleteBtnClick(row)">删除</el-button>
@@ -52,7 +53,7 @@
                         </el-table-column>
                     </Sheet>
                     <div class="pagination-container">
-                        <el-pagination background layout="prev, pager, next, sizes, jumper" :total="total" v-model:current-page="currentPage" v-model:page-size="pageSize" @change="updateCategoryTableData" />
+                        <el-pagination background layout="total, prev, pager, next, sizes, jumper" :total="total" v-model:current-page="currentPage" v-model:page-size="pageSize" @change="updateCategoryTableData" />
                     </div>
                 </div>
             </template>

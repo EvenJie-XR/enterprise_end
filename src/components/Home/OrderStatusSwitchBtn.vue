@@ -18,7 +18,6 @@
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { getPendingOrdersCount } from '../../api/Home';
 
 const emit = defineEmits<{
     activeChange: [activeName: string] // 具名元组语法
@@ -46,19 +45,9 @@ const handleActive = (activeName: string) => {
 }
 
 // 待接单数量
-const pendingOrdersCount = ref(12);
+const pendingOrdersCount = defineModel('pendingOrdersCount');
 // 待派送数量
-const toBeDeliveredCount = ref(10);
-
-getPendingOrdersCount().then((res) => {
-    if(res.data.code) { // code == 1 获取各个状态的订单数量统计成功
-        const data = res.data.data;
-        // 待接单数量
-        pendingOrdersCount.value = data.toBeConfirmed;
-        // 待派送数量
-        toBeDeliveredCount.value = data.confirmed;
-    }
-})
+const toBeDeliveredCount = defineModel('toBeDeliveredCount');
 </script>
 
 <style lang="scss" scoped>
