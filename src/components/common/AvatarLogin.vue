@@ -21,15 +21,23 @@ import { ref } from 'vue';
 import { getShopInfo } from '../../api/Header';
 import { logout } from "../../api/Login"
 import { useLogout } from "../../hooks/LoginHook"
+import { useShopInfo } from '../../stores/Shop';
 
 const name = ref('');
 const avatarImg = ref('');
+const useShopInfoInstance = useShopInfo();
 // 获取店铺信息
 getShopInfo().then((res) => {
     if(res.data.code) { // code == 1 获取成功
         const data = res.data.data;
         name.value = data.name;
         avatarImg.value = data.shopImage;
+        // 全局存储店铺信息
+        useShopInfoInstance.setShopInfo({
+            id: data.id,
+            name: data.name,
+            avatarImg: data.shopImage
+        })
     }
 })
 const onLogoutBtnClick = () => {

@@ -8,3 +8,5 @@ export const login = (phone: String, password: String) => {
 }
 
 export const logout = () => instance.post("/api/admin/employee/logout");
+
+export const weChatLogin = (code: string, state: string) => instance.get(`/api/admin/employee/wxLogin?code=${code}&state=${state}`)

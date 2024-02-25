@@ -1,34 +1,49 @@
 <template>
-    <div class="header-container">
-        <!-- 左侧容器 -->
-        <div class="left-container">
-            <!-- logo -->
-            <div class="logo">
-                <SVGIcon icon-name="logo" class="icon"></SVGIcon>
+    <el-scrollbar class="scroll-bar-container" height="62px">
+        <div class="header-container">
+            <!-- 左侧容器 -->
+            <div class="left-container">
+                <!-- logo -->
+                <div class="logo">
+                    <SVGIcon icon-name="logo" class="icon"></SVGIcon>
+                </div>
+                <!-- 营业状态 -->
+                <div :class="{
+                    'business-state': true,
+                    'closed': shopStatusList[shopStatus].label === '已打烊'
+                    }
+                ">
+                    {{ shopStatusList[shopStatus].label }}
+                </div>
+                <!-- 自动接单状态 -->
+                <div :class="{
+                    'business-state': true,
+                    'closed': !autoOrderTaking
+                    }
+                ">
+                    自动接单
+                </div>
+                <el-switch v-model="autoOrderTaking" @change="handleAutoOrderTakingChange" />
             </div>
-            <!-- 营业状态 -->
-            <div :class="{
-                'business-state': true,
-                'closed': shopStatusList[shopStatus].label === '已打烊'
-                }
-            ">
-                {{ shopStatusList[shopStatus].label }}
+            <!-- 右侧容器 -->
+            <div class="right-container">
+                <!-- 营业状态切换按钮 -->
+                <div class="business-state-change-btn" @click="onSwitchShopStatusBtnClick">
+                    营业状态
+                </div>
+                <!-- 消息 -->
+                <div class="message-box have-message">
+                    <SVGIcon icon-name="message" class="icon"></SVGIcon>
+                </div>
+                <!-- 打印机 -->
+                <div class="print-order-btn">
+                    <SVGIcon icon-name="PrintOrder" class="icon" @click="handlePrintOrderDeviceBtnClick"></SVGIcon>
+                </div>
+                <!-- 商家信息 -->
+                <AvatarLogin></AvatarLogin>
             </div>
         </div>
-        <!-- 右侧容器 -->
-        <div class="right-container">
-            <!-- 营业状态切换按钮 -->
-            <div class="business-state-change-btn" @click="onSwitchShopStatusBtnClick">
-                营业状态
-            </div>
-            <!-- 消息 -->
-            <div class="message-box have-message">
-                <SVGIcon icon-name="message" class="icon"></SVGIcon>
-            </div>
-            <!-- 商家信息 -->
-            <AvatarLogin></AvatarLogin>
-        </div>
-    </div>
+    </el-scrollbar>
     <el-dialog v-model="dialogSwitchShopStatus" title="设置营业状态" align-center>
         <el-select
             v-model="shopStatus"
@@ -44,13 +59,15 @@
             />
         </el-select>
     </el-dialog>
+    <PrintOrderDeviceDialog v-model="printOrderDeviceDialogVisible" />
 </template>
 <script lang="ts" setup>
 import SVGIcon from "../common/SVGIcon.vue"
 import AvatarLogin from "../common/AvatarLogin.vue"
-import { getShopStatus, setShopStatus } from "../../api/Header";
+import { getAutoOrderTakingStatus, getShopStatus, setAutoOrderTakingStatus, setShopStatus } from "../../api/Header";
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
+import PrintOrderDeviceDialog from "../header/PrintOrderDeviceDialog.vue"
 
 // 选择店铺营业状态弹窗是否显示
 const dialogSwitchShopStatus = ref(false);
@@ -95,9 +112,56 @@ getShopStatus().then((res) => {
         shopStatus.value = status;
     }
 })
+
+const autoOrderTaking = ref(false);
+// 获取自动接单状态
+const updateAutoOrderTaking = () => {
+    getAutoOrderTakingStatus().then((res) => {
+        if(res.data.code) {
+            autoOrderTaking.value = res.data.data;
+        } else {
+            ElMessage({
+                message: "获取自动接单状态失败",
+                type: "error"
+            })
+        }
+    })
+}
+updateAutoOrderTaking();
+/**
+ * 处理自动接单设置按钮状态变化
+ * @param val 自动接单？
+ */
+const handleAutoOrderTakingChange = (val: boolean) => {
+    setAutoOrderTakingStatus(val).then((res) => {
+        if(res.data.code) {
+            ElMessage({
+                message: "设置自动接单状态成功",
+                type: "success"
+            })
+            updateAutoOrderTaking();
+        } else {
+            ElMessage({
+                message: "设置自动接单状态失败",
+                type: "error"
+            })
+        }
+    })
+}
+
+const printOrderDeviceDialogVisible = ref(false);
+const handlePrintOrderDeviceBtnClick = () => {
+    printOrderDeviceDialogVisible.value = true;
+}
 </script>
 
 <style lang="scss" scoped>
+.scroll-bar-container {
+    overflow-y: hidden;
+    :deep(.el-scrollbar__view) {
+        height: 100%;
+    }
+}
 .header-container {
     display: flex;
     align-items: center;
@@ -130,6 +194,7 @@ getShopStatus().then((res) => {
             justify-content: center;
             align-items: center;
             font-weight: 400;
+            margin-right: 20px;
             &.closed {
                 background-color: #d3d4d4;
             }
@@ -156,11 +221,12 @@ getShopStatus().then((res) => {
         }
         // 消息
         .message-box {
-            margin-right: 80px;
+            margin-right: 20px;
             width: 45px;
             height: 45px;
             position: relative;
             cursor: pointer;
+            
             // 图标
             .icon {
                 width: 45px;
@@ -179,43 +245,26 @@ getShopStatus().then((res) => {
                 right: 0;
             }
         }
+        .print-order-btn {
+            margin-right: 80px;
+            width: 45px;
+            height: 45px;
+            position: relative;
+            cursor: pointer;
+            // 图标
+            .icon {
+                width: 45px;
+                height: 45px;
+            }
+        }
     }
 }
-
 // 手机端竖屏
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
     .header-container {
-        justify-content: center;
+        width: 1400px;
         .left-container {
-            .logo {
-                margin: 0;
-            }
-            .business-state {
-                display: none;
-            }
-        }
-        // 隐藏营业状态，商家头像等放到nav里面展示，手机端的导航栏只展示一个logo和侧边栏展开按钮
-        .right-container {
-            display: none;
-        }
-    }
-}
-
-// ipad或手机端横屏
-@media screen and (min-width: 769px) and (max-width: 1200px) {
-    .header-container {
-        justify-content: center;
-        .left-container {
-            .logo {
-                margin: 0;
-            }
-            .business-state {
-                display: none;
-            }
-        }
-        // 隐藏营业状态，商家头像等放到nav里面展示，手机端的导航栏只展示一个logo和侧边栏展开按钮
-        .right-container {
-            display: none;
+            margin-right: 40px;
         }
     }
 }

@@ -1,6 +1,6 @@
 <!-- 再次确认的弹窗 -->
 <template>
-    <el-dialog align-center width="400">
+    <el-dialog id="confirm-dialog-container" align-center>
         <span class="tip">{{ props.tip }}</span>
         <template #footer>
             <div class="dialog-footer">
@@ -23,6 +23,17 @@ const props = defineProps({
 const emit = defineEmits(["confirm"])
 </script>
 
+<style lang="scss">
+#confirm-dialog-container {
+    width: 400px;
+}
+// 手机端竖屏
+@media screen and (max-width: 1024px) {
+    #confirm-dialog-container {
+        width: 300px;
+    }
+}
+</style>
 <style lang="scss" scoped>
 .tip {
     display: flex;

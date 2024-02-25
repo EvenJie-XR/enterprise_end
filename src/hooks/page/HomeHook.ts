@@ -1,5 +1,5 @@
 import { Ref, ref } from "vue";
-import { getOrderInfo, getOrderManagerData, getOverviewDishes, getOverviewSetmeals, getPendingOrdersCount, getTodayData, jieDan, juDan, queryOrderDetailInfo, tuiDan } from "../../api/Home";
+import { getOrderInfo, getOrderManagerData, getOverviewDishes, getPendingOrdersCount, getTodayData, jieDan, juDan, queryOrderDetailInfo, tuiDan } from "../../api/Home";
 import * as dayjs from "dayjs"
 import { ElMessage } from "element-plus";
 
@@ -138,34 +138,6 @@ export const useOverviewDishes = () => {
     })
     return {
         overviewDishes
-    }
-}
-
-/**
- * 套餐总览
- * @returns 
- */
-export const useOverviewSetmeals = () => {
-    /**
-     * 套餐总览数据
-     */
-    const overviewSetmeals = ref({
-        discontinued: 2,
-        sold: 12
-    })
-
-    /**
-     * 一进来就获取套餐总览数据
-     */
-    getOverviewSetmeals().then((res) => {
-        if (res.data.code) { // code == 1请求菜品总览数据成功
-            const data = res.data.data;
-            overviewSetmeals.value.sold = data.sold;
-            overviewSetmeals.value.discontinued = data.discontinued;
-        }
-    })
-    return {
-        overviewSetmeals
     }
 }
 
@@ -374,6 +346,6 @@ export const useOrderInfo = () => {
         onChaKanBtnClick,
         orderDetailInfo,
         pendingOrdersCount,
-        toBeDeliveredCount
+        toBeDeliveredCount,
     }
 }

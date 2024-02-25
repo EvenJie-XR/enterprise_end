@@ -24,7 +24,7 @@
         <!-- 营业额、用户统计、销量排名 -->
         <div class="third-panel-container">
             <!-- 营业额统计 -->
-            <ModelPanel class="turnover-container">
+            <ModelPanel class="turnover-container sheet">
                 <template #header>
                     <div class="header-container">
                         营业额统计
@@ -37,7 +37,7 @@
                 </template>
             </ModelPanel>
             <!-- 用户统计 -->
-            <ModelPanel class="user-statistics-container">
+            <ModelPanel class="user-statistics-container sheet">
                 <template #header>
                     <div class="header-container">
                         用户统计
@@ -50,7 +50,7 @@
                 </template>
             </ModelPanel>
             <!-- 销量排名 -->
-            <ModelPanel class="sales-ranking-container">
+            <ModelPanel class="sales-ranking-container sheet">
                 <template #header>
                     <div class="header-container">
                         销量排名
@@ -184,6 +184,27 @@ const { activeTimeName, handleActiveTimeChange } = useActiveTime(turnoverChartDa
 
             .chart-container {
                 height: 310px;
+            }
+        }
+    }
+}
+// 手机端竖屏
+@media screen and (max-width: 1024px) {
+    .data-statistics-page-container {
+        .data-statistics-container {
+            .content-container {
+                display: flex;
+                flex-direction: column;
+                .export-btn {
+                    position: static;
+                    margin-bottom: 10px;
+                }
+            }
+        }
+        .third-panel-container {
+            flex-direction: column;
+            .sheet {
+                width: 100%;
             }
         }
     }

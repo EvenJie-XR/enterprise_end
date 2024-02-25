@@ -32,7 +32,7 @@ const props = defineProps({
 }
 
 // 手机端竖屏
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
     .today-data-card-container {
         width: 100%;
         margin-bottom: 10px;

@@ -1,5 +1,5 @@
 <template>
-    <el-dialog align-center width="40vw" title="修改菜品" @open="onOpen" @close="onClose">
+    <el-dialog align-center id="edit-food-dialog-container" title="修改菜品" @open="onOpen" @close="onClose">
         <el-form label-position="left" label-width="118px" ref="formRef" :model="form" :rules="rules">
             <el-form-item label="菜品名称:" prop="name">
                 <el-input v-model="form.name" placeholder="请输入菜品名称..." />
@@ -200,6 +200,17 @@ const onClose = () => {
 }
 </script>
 
+<style lang="scss">
+#edit-food-dialog-container {
+    width: 40vw;
+}
+// 手机端竖屏
+@media screen and (max-width: 1024px) {
+    #edit-food-dialog-container {
+        width: 90vw;
+    }
+}
+</style>
 <style lang="scss" scoped>
 //
 </style>

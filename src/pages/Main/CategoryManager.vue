@@ -8,19 +8,19 @@
                 </div>
             </template>
             <template #content>
-                <div class="content-container">
+                <el-scrollbar class="content-container" always>
                     <div class="form-contianer">
                         <div class="form-item">
                             <div class="form-key">
                                 分类名称:
                             </div>
                             <div class="form-value">
-                                <el-input v-model="categoryName" placeholder="请输入菜品名称" size="large" />
+                                <el-input v-model="categoryName" placeholder="请输入菜品名称" size="large" style="width: 220px;" />
                             </div>
                         </div>
                     </div>
                     <el-button color="#389E79" class="search-btn" size="large" @click="updateCategoryTableData">搜索</el-button>
-                </div>
+                </el-scrollbar>
             </template>
         </ModelPanel>
         <!-- 数据 -->
@@ -53,7 +53,9 @@
                         </el-table-column>
                     </Sheet>
                     <div class="pagination-container">
-                        <el-pagination background layout="total, prev, pager, next, sizes, jumper" :total="total" v-model:current-page="currentPage" v-model:page-size="pageSize" @change="updateCategoryTableData" />
+                        <el-scrollbar always>
+                            <el-pagination background layout="total, prev, pager, next, sizes, jumper" :total="total" v-model:current-page="currentPage" v-model:page-size="pageSize" @change="updateCategoryTableData" />
+                        </el-scrollbar>
                     </div>
                 </div>
             </template>
@@ -94,6 +96,12 @@ const { categoryName, tableData, currentPage, pageSize, total, updateCategoryTab
             border-radius: 10px;
             box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
+            :deep(.el-scrollbar__view) {
+                display: flex;
+                align-items: center;
+                height: 100%;
+            }
+
             .form-contianer {
                 display: flex;
                 align-items: center;
@@ -105,6 +113,7 @@ const { categoryName, tableData, currentPage, pageSize, total, updateCategoryTab
 
                     .form-key {
                         font-size: 22px;
+                        white-space: nowrap;
                     }
 
                     .form-value {

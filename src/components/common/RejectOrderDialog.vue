@@ -1,5 +1,5 @@
 <template>
-    <el-dialog align-center width="600" :title="props.title">
+    <el-dialog id="reject-order-dialog-container" align-center :title="props.title">
         <div class="content-container">
             <span>{{ props.tip }}</span>
             <el-input
@@ -44,6 +44,17 @@ const emit = defineEmits<{
 }>()
 </script>
 
+<style lang="scss">
+#reject-order-dialog-container {
+    width: 600px;
+}
+// 手机端竖屏
+@media screen and (max-width: 1024px) {
+    #reject-order-dialog-container {
+        width: 360px;
+    }
+}
+</style>
 <style lang="scss" scoped>
 .content-container {
     display: flex;

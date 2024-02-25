@@ -31,7 +31,6 @@ export const useUserInfo = defineStore("UserInfo", () => {
         id.value = userInfo.id;
         name.value = userInfo.name;
         userName.value = userInfo.userName;
-        console.log(token.value);
         localStorage.setItem("UserInfo", JSON.stringify(userInfo));
     }
 

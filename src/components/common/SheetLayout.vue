@@ -33,4 +33,15 @@
         justify-content: center;
     }
 }
+
+// 手机端竖屏
+@media screen and (max-width: 1024px) { 
+    .sheet-layout-container {
+        .pagination-container {
+            justify-content: flex-start;
+            overflow-x: auto;
+            padding: 0 20px;
+        }
+    }
+}
 </style>

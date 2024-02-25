@@ -9,13 +9,13 @@
                     <el-input v-model="form.phone" placeholder="请输入手机号..." />
                 </el-form-item>
                 <el-form-item label="密码:" prop="password" required>
-                    <el-input v-model="form.password" placeholder="请输入密码..." />
+                    <el-input v-model="form.password" type="password" show-password placeholder="请输入密码..." />
                 </el-form-item>
                 <el-form-item>
                     <el-button color="#28A767" style="width: 100%;" @click="onSubmit(formRef)" :loading="formSubmiting">登录</el-button>
                 </el-form-item>
                 <el-form-item class="quick-login-btn-container">
-                    <SVGIcon icon-name="WeChat" class="quick-login-btn"></SVGIcon>
+                    <SVGIcon icon-name="WeChat" class="quick-login-btn" @click="onWeChatBtnClick"></SVGIcon>
                 </el-form-item>
             </el-form>
         </el-main>
@@ -24,10 +24,12 @@
 <script lang="ts" setup>
 import { Ref, ref } from "vue";
 import SVGIcon from "../components/common/SVGIcon.vue"
-import { login } from "../api/Login"
+import { login, weChatLogin } from "../api/Login"
 import { ElMessage, FormRules, type FormInstance } from 'element-plus'
 import { useUserInfo } from "../stores/Login"
 import { router } from "../routers/index"
+import { useRoute } from "vue-router"
+import { AxiosResponse } from "axios";
 
 // form字段
 const form = ref({
@@ -49,6 +51,27 @@ const formValidate = (formEl: FormInstance) => {
     return formEl.validate((valid: any) => valid ? true : false);
 
 }
+/**
+ * 处理登录成功
+ * @param res 
+ */
+const handleLoginSuccess = (res: AxiosResponse<any, any>) => {
+    // 获取到UserInfo的pinia存储库
+    const useUserInfoInstance = useUserInfo();
+    // 设置登录成功之后的用户信息
+    const userInfo = res.data.data;
+    // 存储登录成功之后的用户信息到UserInfo存储库
+    useUserInfoInstance.setUserInfo(userInfo)
+    // 提示登录成功
+    ElMessage({
+        message: "登录成功",
+        type: "success"
+    });
+    // 登录成功跳转到工作台页面
+    router.push({
+        name: "Home"
+    })
+}
 // 登录
 const onSubmit = (formEl: FormInstance) => {
 
@@ -68,22 +91,7 @@ const onSubmit = (formEl: FormInstance) => {
 
                 if (res.data.code) { // code = 1登录成功
 
-                    // 获取到UserInfo的pinia存储库
-                    const useUserInfoInstance = useUserInfo();
-                    // 设置登录成功之后的用户信息
-                    const userInfo = res.data.data;
-                    console.log(userInfo);
-                    // 存储登录成功之后的用户信息到UserInfo存储库
-                    useUserInfoInstance.setUserInfo(userInfo)
-                    // 提示登录成功
-                    ElMessage({
-                        message: "登录成功",
-                        type: "success"
-                    });
-                    // 登录成功跳转到工作台页面
-                    router.push({
-                        name: "Home"
-                    })
+                    handleLoginSuccess(res);
                 } else { // code = 0 登录失败
 
                     // 把后端返回的错误信息提示出来
@@ -103,6 +111,31 @@ const onSubmit = (formEl: FormInstance) => {
     })
 
 }
+/**
+ * 微信按钮click事件
+ */
+const onWeChatBtnClick = () => {
+    location.href = 'https://open.weixin.qq.com/connect/qrconnect?appid=wx8830e861d776fab6&redirect_uri=http://www.localhost%3A5173%2FLogin&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect';
+}
+const route = useRoute();
+const handleWeChatLogin = () => {
+    if(route.query.code && route.query.state) {
+        const code = route.query.code as string;
+        const state = route.query.state as string;
+        weChatLogin(code, state).then((res) => {
+            console.log(res);
+            if(res.data.code) {
+                handleLoginSuccess(res);
+            } else {
+                ElMessage({
+                    message: "微信登录失败",
+                    type: "error"
+                })
+            }
+        });
+    }
+}
+handleWeChatLogin();
 </script>
 
 <style lang="scss" scoped>

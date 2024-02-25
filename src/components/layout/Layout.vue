@@ -90,69 +90,7 @@ const foldNav = () => {
 }
 
 // 手机端竖屏
-@media screen and (max-width: 768px) {
-    .layout-container {
-        .header-container {
-            position: relative;
-            display: flex;
-            width: 100%;
-            align-items: center;
-            justify-content: center;
-            .nav-expand-logo {
-                font-size: 28px;
-                position: absolute;
-                left: 20px;
-                color: #389e79;
-                z-index: 80;
-                display: block;
-            }
-        }
-        .content-container {
-            .mobile-nav-mask {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: #00000080;
-                z-index: 9998;
-                &.expand {
-                    display: block;
-                }
-            }
-            .nav-container {
-                position: fixed;
-                top: 0;
-                left: -200px;
-                background-color: white;
-                bottom: 0;
-                z-index: 9999;
-                transition: .3s all;
-                &.expand {
-                    left: 0px;
-                }
-                .fold-line {
-                    display: flex;
-                    width: 148px;
-                    justify-content: center;
-                    margin-bottom: 20px;
-                    .nav-fold-btn {
-                        font-size: 28px;
-                        color: #389e79;
-                        text-align: center;
-                        display: block;
-                    }
-                }
-            }
-            .page-container {
-                width: 100%;
-            }
-        }
-    }
-}
-
-// ipad或手机端横屏
-@media screen and (min-width: 769px) and (max-width: 1200px) {
+@media screen and (max-width: 1024px) {
     .layout-container {
         .header-container {
             position: relative;

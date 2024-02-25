@@ -1,47 +1,47 @@
 <template>
-    <el-dialog align-center width="40vw" title="订单信息">
+    <el-dialog id="order-info-dialog-container" align-center title="订单信息">
         <el-scrollbar height="60vh">
             <el-card shadow="never" class="card">
                 <el-row :gutter="20">
-                    <el-col :span="12" class="item">
+                    <el-col :span="12" :xs="20" :sm="20" :md="12" class="item">
                         <span class="key">订单号:</span>
                         <span>{{ detailOrderInfo["订单号"] }}</span>
                     </el-col>
-                    <el-col :span="12" class="item">
+                    <el-col :span="12" :xs="20" :sm="20" :md="12" class="item">
                         <span class="key">下单时间:</span>
                         <span>{{ detailOrderInfo["下单时间"] }}</span>
                     </el-col>
-                    <el-col :span="12" class="item">
+                    <el-col :span="12" :xs="20" :sm="20" :md="12" class="item">
                         <span class="key">订单状态:</span>
                         <span>
                             {{ detailOrderInfo["订单状态"] }}
                         </span>
                     </el-col>
-                    <el-col :span="12" class="item">
+                    <el-col :span="12" :xs="20" :sm="20" :md="12" class="item">
                         <span class="key">订单金额:</span>
                         <span>
                             {{ detailOrderInfo["订单金额"] }}
                         </span>
                     </el-col>
-                    <el-col :span="12" class="item">
+                    <el-col :span="12" :xs="20" :sm="20" :md="12" class="item">
                         <span class="key">用户名:</span>
                         <span>
                             {{ detailOrderInfo["用户名"] }}
                         </span>
                     </el-col>
-                    <el-col :span="12" class="item">
+                    <el-col :span="12" :xs="20" :sm="20" :md="12" class="item">
                         <span class="key">手机号:</span>
                         <span>
                             {{ detailOrderInfo["手机号"] }}
                         </span>
                     </el-col>
-                    <el-col :span="12" class="item">
+                    <el-col :span="12" :xs="20" :sm="20" :md="12" class="item">
                         <span class="key">地址:</span>
                         <span>
                             {{ detailOrderInfo["地址"] }}
                         </span>
                     </el-col>
-                    <el-col :span="12" class="item" v-if="detail?.value?.status === 6">
+                    <el-col :span="12" :xs="20" class="item" v-if="detail?.value?.status === 6">
                         <span class="key">取消原因:</span>
                         <span>
                             {{ detailOrderInfo["取消原因"] }}
@@ -103,7 +103,17 @@ const detailOrderInfo = computed(() => {
     }
 });
 </script>
-
+<style lang="scss">
+#order-info-dialog-container {
+    width: 40vw;
+}
+// 手机端竖屏
+@media screen and (max-width: 1024px) {
+    #order-info-dialog-container {
+        width: 90vw;
+    }
+}
+</style>
 <style lang="scss" scoped>
 .card {
     margin-bottom: 10px;

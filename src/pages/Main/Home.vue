@@ -5,7 +5,7 @@
             <template v-slot:header>
                 <div class="today-data-card-title-container">
                     <div class="title">今日数据 / {{ todayDateStr }}</div>
-                    <div class="more-info-btn">查看详细数据 ></div>
+                    <div class="more-info-btn" @click="$router.push({name: 'DataStatistics'})">查看详细数据 ></div>
                 </div>
             </template>
             <template v-slot:content>
@@ -93,7 +93,9 @@
                 </Sheet>
             </template>
             <template #pagination>
-                <el-pagination background layout="total, prev, pager, next, sizes, jumper" :total="total" v-model:page-size="pageSize" v-model:current-page="currentPage" @change="onCurrentPageOrPageSizeChange" />
+                <el-scrollbar always>
+                    <el-pagination background layout="total, prev, pager, next, sizes, jumper" :total="total" v-model:page-size="pageSize" v-model:current-page="currentPage" @change="onCurrentPageOrPageSizeChange" />
+                </el-scrollbar>
             </template>
         </SheetLayout>
         <ConfirmDialog v-model="jieDanConfirmDialogVisible" tip="确认接单？" btn-text="接单" @confirm="onConfirmJieDanBtnClick" />
@@ -111,7 +113,7 @@ import SVGIcon from "../../components/common/SVGIcon.vue"
 import SheetLayout from "../../components/common/SheetLayout.vue"
 import Sheet from "../../components/common/Sheet.vue"
 import OrderStatusSwitchBtn from "../../components/Home/OrderStatusSwitchBtn.vue";
-import { useOrderInfo, useOrderManager, useOverviewDishes, useOverviewSetmeals, useTodayData } from "../../hooks/page/HomeHook"
+import { useOrderInfo, useOrderManager, useOverviewDishes, useTodayData } from "../../hooks/page/HomeHook"
 import ConfirmDialog from "../../components/common/ConfirmDialog.vue"
 import RejectOrderDialog from "../../components/common/RejectOrderDialog.vue"
 import OrderInfoDialog from "../../components/common/OrderInfoDialog.vue"
@@ -138,7 +140,7 @@ const {
     onChaKanBtnClick,
     orderDetailInfo,
     pendingOrdersCount,
-    toBeDeliveredCount
+    toBeDeliveredCount,
 } = useOrderInfo();
 
 // 今日数据
@@ -149,9 +151,6 @@ const { orderformDataList } = useOrderManager();
 
 // 菜品总览
 const { overviewDishes } = useOverviewDishes();
-
-// 套餐总览
-const { overviewSetmeals } = useOverviewSetmeals();
 </script>
 
 <style lang="scss" scoped>
@@ -207,11 +206,13 @@ const { overviewSetmeals } = useOverviewSetmeals();
             }
         }
         .food-manager-panel {
+            width: 100%;
             .food-container {
                 display: flex;
             }
             .food-category-manager-container, .foodcombo-manager-container {
                 margin-right: 58px;
+                width: 100%;
                 &:last-child {
                     margin-right: 0;
                 }
@@ -263,7 +264,7 @@ const { overviewSetmeals } = useOverviewSetmeals();
 }
 
 // 手机端竖屏
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
     .home-container {
         .today-data-card-list-container {
             flex-direction: column;
@@ -277,6 +278,11 @@ const { overviewSetmeals } = useOverviewSetmeals();
                 .orderform-manager-card-container {
                     flex-direction: column;
                 }
+            }
+        }
+        .sheet-container {
+            .header-container {
+                padding: 0 10px;
             }
         }
     }

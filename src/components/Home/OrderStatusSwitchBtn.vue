@@ -69,4 +69,12 @@ const toBeDeliveredCount = defineModel('toBeDeliveredCount');
         }
     }
 }
+// 手机端竖屏
+@media screen and (max-width: 1024px) {
+    .order-status-switch-btn-container {
+        & > div {
+            padding: 8px 10px;
+        }
+    }
+}
 </style>

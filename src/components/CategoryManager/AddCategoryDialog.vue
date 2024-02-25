@@ -1,5 +1,5 @@
 <template>
-    <el-dialog align-center width="40vw" title="新建菜品分类">
+    <el-dialog align-center id="add-category-dialog-container" title="新建菜品分类">
         <el-form
             label-width="100px"
             :model="form"
@@ -62,7 +62,17 @@ const onAddAndContinueBtnClick = () => {
     })
 }
 </script>
-
+<style lang="scss">
+#add-category-dialog-container {
+    width: 40vw;
+}
+// 手机端竖屏
+@media screen and (max-width: 1024px) {
+    #add-category-dialog-container {
+        width: 90vw;
+    }
+}
+</style>
 <style lang="scss" scoped>
 //
 </style>

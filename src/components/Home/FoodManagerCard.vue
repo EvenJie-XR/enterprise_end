@@ -14,7 +14,7 @@
 
 <style lang="scss" scoped>
 .food-manager-card-container {
-    width: 296px;
+    width: 100%;
     height: 43px;
     background-color: white;
     display: flex;
@@ -22,11 +22,5 @@
     justify-content: space-between;
     padding: 0 26px 0 16px;
     box-sizing: border-box;
-}
-
-@media screen and (min-width: 769px) and (max-width: 1200px) {
-    .food-manager-card-container {
-        width: 386px;
-    }
 }
 </style>

@@ -8,14 +8,14 @@
                 </div>
             </template>
             <template #content>
-                <div class="content-container">
+                <el-scrollbar class="content-container" always>
                     <div class="form-contianer">
                         <div class="form-item">
                             <div class="form-key">
                                 订单号:
                             </div>
                             <div class="form-value">
-                                <el-input v-model="no" size="large" placeholder="请输入订单号..." clearable />
+                                <el-input v-model="no" size="large" placeholder="请输入订单号..." clearable style="width: 200px;" />
                             </div>
                         </div>
                         <div class="form-item">
@@ -23,7 +23,7 @@
                                 手机号:
                             </div>
                             <div class="form-value">
-                                <el-input v-model="phone" size="large" placeholder="请输入手机号..." clearable />
+                                <el-input v-model="phone" size="large" placeholder="请输入手机号..." clearable style="width: 200px;" />
                             </div>
                         </div>
                         <div class="form-item">
@@ -31,30 +31,23 @@
                                 下单时间:
                             </div>
                             <div class="form-value">
-                                <el-date-picker
-                                    v-model="orderTime"
-                                    type="datetimerange"
-                                    start-placeholder="开始时间"
-                                    end-placeholder="结束时间"
-                                    size="large"
-                                    format="YYYY-MM-DD HH:mm:ss"
-                                    date-format="YYYY-MM-DD"
-                                    time-format="hh:mm:ss"
-                                    style="width: 240px;"
-                                />
+                                <el-date-picker v-model="orderTime" type="datetimerange" start-placeholder="开始时间"
+                                    end-placeholder="结束时间" size="large" format="YYYY-MM-DD HH:mm:ss"
+                                    date-format="YYYY-MM-DD" time-format="hh:mm:ss" style="width: 240px;" />
                             </div>
                         </div>
                     </div>
                     <el-button color="#389E79" class="search-btn" size="large" @click="updateTableData">查询</el-button>
                     <el-button class="search-btn" size="large" @click="reset">重置</el-button>
-                </div>
+                </el-scrollbar>
             </template>
         </ModelPanel>
         <!-- 数据 -->
         <ModelPanel class="data-sheet-container">
             <template #header>
                 <div class="header-container">
-                    <el-tabs v-model="activeCategoryName" class="category-tabs" @tab-change="handleActiveCategoryNameChange">
+                    <el-tabs v-model="activeCategoryName" class="category-tabs"
+                        @tab-change="handleActiveCategoryNameChange">
                         <el-tab-pane label="全部订单" :name="0"></el-tab-pane>
                         <el-tab-pane label="待付款" :name="1"></el-tab-pane>
                         <el-tab-pane label="待接单" :name="2"></el-tab-pane>
@@ -67,12 +60,12 @@
             </template>
             <template #content>
                 <div class="content-container">
-                    <Sheet class="sheet-container" tooltip-effect :pinto="true" :table-data="tableData" height="500px">
+                    <Sheet class="sheet-container" tooltip-effect :pinto="true" :table-data="tableData" height="516px">
                         <el-table-column prop="number" label="订单号" />
                         <el-table-column prop="orderDishes" label="订单菜品" />
                         <el-table-column prop="username" label="订单状态">
-                            <template #default="{row}">
-                                {{ 
+                            <template #default="{ row }">
+                                {{
                                     // @ts-ignore
                                     statusCodeMap[row.status]
                                 }}
@@ -83,8 +76,8 @@
                         <el-table-column prop="address" label="地址" />
                         <el-table-column prop="orderTime" sortable label="下单时间" />
                         <el-table-column prop="amount" label="实收金额">
-                            <template #default="{row}">
-                                {{ 
+                            <template #default="{ row }">
+                                {{
                                     // @ts-ignore
                                     "￥" + row.amount
                                 }}
@@ -92,26 +85,35 @@
                         </el-table-column>
                         <el-table-column prop="remark" label="备注" />
                         <el-table-column label="操作">
-                            <template #default="{row}">
+                            <template #default="{ row }">
                                 <div class="control-container">
-                                    <el-button text class="control-btn" type="success" @click="onTableJieDanBtnClick(row)" v-if="row.status === 2">接单</el-button>
-                                    <el-button text class="control-btn" type="danger" v-if="row.status === 2" @click="onTableJuDanBtnClick(row)">拒单</el-button>
-                                    <el-button text class="control-btn" type="danger" v-if="row.status === 3" @click="onTableCancelBtnClick(row)">取消</el-button>
-                                    <el-button text class="control-btn" @click="onTableViewDeatilBtnClick(row)">查看</el-button>
+                                    <el-button text class="control-btn" type="success" @click="onTableJieDanBtnClick(row)"
+                                        v-if="row.status === 2">接单</el-button>
+                                    <el-button text class="control-btn" type="danger" v-if="row.status === 2"
+                                        @click="onTableJuDanBtnClick(row)">拒单</el-button>
+                                    <el-button text class="control-btn" type="danger" v-if="row.status === 3"
+                                        @click="onTableCancelBtnClick(row)">取消</el-button>
+                                    <el-button text class="control-btn"
+                                        @click="onTableViewDeatilBtnClick(row)">查看</el-button>
                                 </div>
                             </template>
                         </el-table-column>
                     </Sheet>
                     <div class="pagination-container">
-                        <el-pagination background layout="total, prev, pager, next, sizes, jumper" :total="total" v-model:page-size="pageSize" v-model:current-page="currentPage" @change="onPaginationChange" />
+                        <el-scrollbar always>
+                            <el-pagination background layout="total, prev, pager, next, sizes, jumper" :total="total"
+                                v-model:page-size="pageSize" v-model:current-page="currentPage" @change="onPaginationChange" />
+                        </el-scrollbar>
                     </div>
                 </div>
             </template>
         </ModelPanel>
     </div>
     <ConfirmDialog v-model="jieDanConfirmDialogVisible" tip="确定接单?" btn-text="接单" @confirm="onJieDanConfirmBtnClick" />
-    <RejectOrderDialog v-model="juDanConfirmDialogVisible" title="拒单原因" tip="拒单原因" placeholder="请输入拒单原因..." btn="拒单" @confirm="onJuDanConfirmBtnClick" />
-    <RejectOrderDialog v-model="cancelConfirmDialogVisible" title="取消原因" tip="取消原因" placeholder="请输入取消原因..." btn="取消订单" @confirm="onCancelConfirmBtnClick"/>
+    <RejectOrderDialog v-model="juDanConfirmDialogVisible" title="拒单原因" tip="拒单原因" placeholder="请输入拒单原因..." btn="拒单"
+        @confirm="onJuDanConfirmBtnClick" />
+    <RejectOrderDialog v-model="cancelConfirmDialogVisible" title="取消原因" tip="取消原因" placeholder="请输入取消原因..." btn="取消订单"
+        @confirm="onCancelConfirmBtnClick" />
     <OrderInfoDialog v-model="viewDetailConfirmDialogVisible" :detail="detailOrderInfo" />
 </template>
 <script lang="ts" setup>
@@ -123,7 +125,7 @@ import ConfirmDialog from "../../components/common/ConfirmDialog.vue";
 import RejectOrderDialog from "../../components/common/RejectOrderDialog.vue";
 import OrderInfoDialog from "../../components/common/OrderInfoDialog.vue";
 
-const { 
+const {
     tableData, jieDanConfirmDialogVisible, onTableJieDanBtnClick, onJieDanConfirmBtnClick, juDanConfirmDialogVisible, onTableJuDanBtnClick, cancelConfirmDialogVisible, onTableCancelBtnClick, viewDetailConfirmDialogVisible, onTableViewDeatilBtnClick, detailOrderInfo, // 表格部分
     no, phone, orderTime, reset, // 查询订单部分
     activeCategoryName, handleActiveCategoryNameChange, // 订单状态选择部分
@@ -151,6 +153,12 @@ const {
             border-radius: 10px;
             box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
+            :deep(.el-scrollbar__view) {
+                display: flex;
+                align-items: center;
+                height: 100%;
+            }
+
             .form-contianer {
                 display: flex;
                 align-items: center;
@@ -158,10 +166,12 @@ const {
                 .form-item {
                     display: flex;
                     align-items: center;
-                    margin-right: 43px;
+                    padding-right: 43px;
+
 
                     .form-key {
                         font-size: 22px;
+                        white-space: nowrap;
                     }
 
                     .form-value {
@@ -185,13 +195,16 @@ const {
 
         .header-container {
             display: flex;
+
             .category-tabs {
                 width: 100%;
                 height: 100%;
                 padding: 10px 0 0 0;
+
                 :deep(.el-tabs__header) {
                     margin: 0;
                 }
+
                 :deep(.el-tabs__nav) {
                     .el-tabs__item {
                         font-size: 20px;
@@ -199,6 +212,7 @@ const {
                     }
                 }
             }
+
             .btn {
                 font-size: 20px;
                 padding: 20px 40px;
@@ -220,9 +234,11 @@ const {
                         margin-right: 10px;
                     }
                 }
+
                 .control-container {
                     display: flex;
                     flex-wrap: wrap;
+
                     .el-button+.el-button {
                         margin: 0;
                     }
@@ -235,5 +251,4 @@ const {
             justify-content: center;
         }
     }
-}
-</style>
+}</style>
