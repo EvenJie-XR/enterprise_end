@@ -191,6 +191,8 @@ const onEditSaveBtnClick = () => {
                         message: "修改打印机设备信息成功",
                         type: "success"
                     })
+                    editPrintOrderDeviceDialogVisible.value = false;
+                    updateTableData();
                 } else {
                     ElMessage({
                         message: "修改打印机设备信息失败",

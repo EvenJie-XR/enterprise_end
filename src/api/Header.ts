@@ -43,7 +43,7 @@ export const addPrintOrderDevice = (option: {
     key: string, // 设备识别码
     remark: string, // 设备备注
     phoneNum: string // 流量卡号码
-}) => instance.post(`/api/admin/printer`, option);
+}) => instance.post(`/api/admin/printer?printerId=${option.printerId}&key=${option.key}&phoneNum=${option.phoneNum}&remark=${option.remark}`);
 
 /**
  * 删除打印机设备
@@ -60,3 +60,10 @@ export const editPrintOrderDevice = (option: {
     remark: string,
     phoneNum: string
 }) => instance.put(`/api/admin/printer?printerId=${option.printerId}&phoneNum=${option.phoneNum}&remark=${option.remark}`);
+
+/**
+ * 查询店铺历史消息
+ * @param shopId 店铺id
+ * @returns 
+ */
+export const queryShopHistoryMessage = (shopId: number) => instance.get(`/api/admin/shopMessage/list?shopId=${shopId}`);

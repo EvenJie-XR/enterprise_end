@@ -1,7 +1,8 @@
-import { Ref, ref } from "vue";
+import { Ref, computed, onUnmounted, ref } from "vue";
 import { getOrderInfo, getOrderManagerData, getOverviewDishes, getPendingOrdersCount, getTodayData, jieDan, juDan, queryOrderDetailInfo, tuiDan } from "../../api/Home";
 import * as dayjs from "dayjs"
 import { ElMessage } from "element-plus";
+import { MessageEventTypeEnum, useMessageHook } from "../messageHook";
 
 /**
  * 今日数据
@@ -170,26 +171,49 @@ export const useOrderInfo = () => {
     const pendingOrdersCount = ref(0);
     // 待派送数量
     const toBeDeliveredCount = ref(0);
+    const currentActiveName = ref('');
+    // 用于请求的status
+    const queryStatus = computed(() => {
+        if(currentActiveName.value)
+            return currentActiveName.value  === "pending-order" ? 2 : 3
+        return '';
+    })
+
+    // 处理实时接收消息相关逻辑-------------------------------------------------------------------------
+    const useMessageHookInstance = useMessageHook();
+    // 如果有新的订单来了就更新表格
+    const offNewOrderListener = useMessageHookInstance.addEventListener(() => {
+        console.log("有新订单了更新工作台订单表格");
+        getNewOrderInfo()
+    }, MessageEventTypeEnum.newOrder)
+    const offCancelOrderListener = useMessageHookInstance.addEventListener(() => {
+        console.log("有用户取消订单了更新工作台订单表格");
+        getNewOrderInfo()
+    }, MessageEventTypeEnum.cancelOrder)
+    // 页面销毁时取消监听函数
+    onUnmounted(() => {
+        offNewOrderListener();
+        offCancelOrderListener();
+    })
+    // -----------------------------------------------------------------------------------------------
+
     /**
      * 处理订单状态选择按钮激活状态变化事件
      * @param activeName 订单状态激活状态字符串
      */
     const handleOrderStatusSwitchChange = (activeName: string) => {
         console.log("订单状态选择按钮激活状态变化了", activeName);
-        if(activeName) {
-            getNewOrderInfo(activeName === "pending-order" ? 2 : 3);
-        } else {
-            getNewOrderInfo();
-        }
+        currentActiveName.value = activeName;
+        getNewOrderInfo();
     }
     /**
      * 获取订单信息接口
      */
-    const getNewOrderInfo = (status: string | number = "") => {
+    const getNewOrderInfo = () => {
         getOrderInfo({
             page: currentPage.value,
             pageSize: pageSize.value,
-            status
+            status: queryStatus.value
         }).then((res) => {
             if(res.data.code) {
                 tableData.value = res.data.data.records;
@@ -310,7 +334,6 @@ export const useOrderInfo = () => {
         queryOrderDetailInfo(currentRow.value.id)
         .then((res) => {
             if(res.data.code) {
-                console.log(res.data.data);
                 orderDetailInfo.value = res.data.data;
             } else {
                 ElMessage({

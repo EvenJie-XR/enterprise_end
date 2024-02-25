@@ -8,13 +8,16 @@
         </div>
         <!-- 内容容器 -->
         <div class="content-container">
-            <!-- 左侧导航栏容器 -->
-            <div :class="{'nav-container': true, 'expand': expand}">
-                <div class="fold-line">
-                    <el-icon class="nav-fold-btn" @click="foldNav"><Fold /></el-icon>
+            
+                <!-- 左侧导航栏容器 -->
+                <div :class="{'nav-container': true, 'expand': expand}">
+                    <el-scrollbar>
+                        <div class="fold-line">
+                            <el-icon class="nav-fold-btn" @click="foldNav"><Fold /></el-icon>
+                        </div>
+                        <Nav></Nav>
+                    </el-scrollbar>
                 </div>
-                <Nav></Nav>
-            </div>
             <el-scrollbar class="scroll-bar">
                 <!-- 主体页面内容容器 -->
                 <div class="page-container">

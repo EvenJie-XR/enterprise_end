@@ -1,8 +1,9 @@
-import { Ref, computed, onMounted, ref } from "vue";
+import { Ref, computed, onMounted, onUnmounted, ref } from "vue";
 import { getOrder } from "../../api/OrderManager";
 import * as dayjs from "dayjs"
 import { jieDan, juDan, queryOrderDetailInfo, tuiDan } from "../../api/Home";
 import { ElMessage } from "element-plus";
+import { MessageEventTypeEnum, useMessageHook } from "../messageHook";
 
 /**
  * 表格部分
@@ -165,6 +166,24 @@ export const useOrderformManager = () => {
         updateTableData();
     })
 
+    // ------------------处理实时消息相关逻辑---------------------------------------------------------
+    const useMessageHookInstance = useMessageHook();
+    // 如果有新的订单来了就更新表格
+    const offNewOrderListener = useMessageHookInstance.addEventListener(() => {
+        console.log("有新订单了更新订单管理订单表格");
+        updateTableData()
+    }, MessageEventTypeEnum.newOrder)
+    const offCancelOrderListener = useMessageHookInstance.addEventListener(() => {
+        console.log("有用户取消订单了更新订单管理订单表格");
+        updateTableData()
+    }, MessageEventTypeEnum.cancelOrder)
+    // 页面销毁时取消监听函数
+    onUnmounted(() => {
+        offNewOrderListener();
+        offCancelOrderListener();
+    })
+    // ---------------------------------------------------------------------------------------------
+
     /**
      * 更新表格数据
      */
@@ -179,7 +198,6 @@ export const useOrderformManager = () => {
             status: activeCategoryName.value ? activeCategoryName.value : ""
         }).then((res) => {
             if(res.data.code) {
-                console.log(res.data.data);
                 tableData.value = res.data.data.records;
                 total.value = res.data.data.total;
             }

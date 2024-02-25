@@ -32,8 +32,8 @@
                     营业状态
                 </div>
                 <!-- 消息 -->
-                <div class="message-box have-message">
-                    <SVGIcon icon-name="message" class="icon"></SVGIcon>
+                <div :class="{ 'message-box': true, 'have-message': haveMessage}">
+                    <SVGIcon icon-name="message" class="icon" @click="handleMessageBoxBtnClick"></SVGIcon>
                 </div>
                 <!-- 打印机 -->
                 <div class="print-order-btn">
@@ -60,6 +60,7 @@
         </el-select>
     </el-dialog>
     <PrintOrderDeviceDialog v-model="printOrderDeviceDialogVisible" />
+    <MessageBox v-model="systemMessageBoxDialogVisible" @new-message="onNewMessage" />
 </template>
 <script lang="ts" setup>
 import SVGIcon from "../common/SVGIcon.vue"
@@ -68,6 +69,7 @@ import { getAutoOrderTakingStatus, getShopStatus, setAutoOrderTakingStatus, setS
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
 import PrintOrderDeviceDialog from "../header/PrintOrderDeviceDialog.vue"
+import MessageBox from "../header/MessageBox.vue";
 
 // 选择店铺营业状态弹窗是否显示
 const dialogSwitchShopStatus = ref(false);
@@ -153,6 +155,17 @@ const printOrderDeviceDialogVisible = ref(false);
 const handlePrintOrderDeviceBtnClick = () => {
     printOrderDeviceDialogVisible.value = true;
 }
+
+
+const systemMessageBoxDialogVisible = ref(false);
+const handleMessageBoxBtnClick = () => {
+    systemMessageBoxDialogVisible.value = true;
+    haveMessage.value = false;
+}
+const onNewMessage = () => {
+    haveMessage.value = true;
+}
+const haveMessage = ref(true);
 </script>
 
 <style lang="scss" scoped>

@@ -41,7 +41,7 @@
                             {{ detailOrderInfo["地址"] }}
                         </span>
                     </el-col>
-                    <el-col :span="12" :xs="20" class="item" v-if="detail?.value?.status === 6">
+                    <el-col :span="12" :xs="20" class="item" v-if="detail?.status === 6">
                         <span class="key">取消原因:</span>
                         <span>
                             {{ detailOrderInfo["取消原因"] }}
