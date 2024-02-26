@@ -273,7 +273,7 @@ const haveMessage = ref(true);
     }
 }
 // 手机端竖屏
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1200px) {
     .header-container {
         width: 1400px;
         .left-container {

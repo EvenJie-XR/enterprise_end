@@ -49,7 +49,14 @@ const updateShopHistoryMessage = () => {
         }
     })
 }
-updateShopHistoryMessage();
+// 因为店铺id是接口请求结果需要等待这个接口请求成功
+const interval = setInterval(() => {
+    if(useShopInfoInstance.id) {
+        updateShopHistoryMessage();
+        clearInterval(interval);
+    }
+}, 500)
+
 
 
 // 创建一个WebSocket实例，指定要连接的服务器URL

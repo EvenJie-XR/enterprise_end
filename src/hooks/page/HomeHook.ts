@@ -1,6 +1,6 @@
 import { Ref, computed, onUnmounted, ref } from "vue";
 import { getOrderInfo, getOrderManagerData, getOverviewDishes, getPendingOrdersCount, getTodayData, jieDan, juDan, queryOrderDetailInfo, tuiDan } from "../../api/Home";
-import * as dayjs from "dayjs"
+import dayjs from "dayjs"
 import { ElMessage } from "element-plus";
 import { MessageEventTypeEnum, useMessageHook } from "../messageHook";
 

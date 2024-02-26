@@ -115,7 +115,8 @@ const onSubmit = (formEl: FormInstance) => {
  * 微信按钮click事件
  */
 const onWeChatBtnClick = () => {
-    location.href = 'https://open.weixin.qq.com/connect/qrconnect?appid=wx8830e861d776fab6&redirect_uri=http://www.localhost%3A5173%2FLogin&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect';
+    
+    location.href = import.meta.env.MODE === 'development' ? 'https://open.weixin.qq.com/connect/qrconnect?appid=wx8830e861d776fab6&redirect_uri=http://www.localhost%3A5173%2FLogin&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect' : 'https://open.weixin.qq.com/connect/qrconnect?appid=wx8830e861d776fab6&redirect_uri=http://110.41.166.41%3A48888%2FLogin&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect';
 }
 const route = useRoute();
 const handleWeChatLogin = () => {
