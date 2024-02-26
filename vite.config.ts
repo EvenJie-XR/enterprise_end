@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import path from "path";
+import fs from "fs"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -22,7 +23,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://110.41.166.41:8080',
+        target: 'http://110.41.166.41:8081',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
@@ -31,6 +32,6 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/mock/, ''),
       }
-    }
+    },
   }
 })

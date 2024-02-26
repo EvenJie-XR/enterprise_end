@@ -53,7 +53,7 @@ updateShopHistoryMessage();
 
 
 // 创建一个WebSocket实例，指定要连接的服务器URL
-const socket = new WebSocket(`ws://110.41.166.41:8080/ws/${useShopInfoInstance.id}`);
+const socket = new WebSocket(`ws://110.41.166.41:8081/ws/${useShopInfoInstance.id}`);
 // 当WebSocket连接成功建立时触发
 socket.onopen = () => {
     console.log('WebSocket连接已建立');
