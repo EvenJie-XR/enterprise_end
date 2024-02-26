@@ -1,4 +1,4 @@
-import { instance } from ".";
+import { apiPrefix, instance } from ".";
 import { QueryCategoryManagerOption } from "../types/page/CategoryManagerTypes";
 
 /**
@@ -6,7 +6,7 @@ import { QueryCategoryManagerOption } from "../types/page/CategoryManagerTypes";
  * @param option 参数
  * @returns 
  */
-export const queryCategory = (option: QueryCategoryManagerOption) => instance.get(`/api/admin/category/page?name=${option.name}&page=${option.page}&pageSize=${option.pageSize}&type=1`);
+export const queryCategory = (option: QueryCategoryManagerOption) => instance.get(`${apiPrefix}/admin/category/page?name=${option.name}&page=${option.page}&pageSize=${option.pageSize}&type=1`);
 
 /**
  * 添加分类
@@ -14,7 +14,7 @@ export const queryCategory = (option: QueryCategoryManagerOption) => instance.ge
  * @param sort 排序编号
  * @returns 
  */
-export const addCategory = (categoryName: string, sort: number) => instance.post(`/api/admin/category`, {
+export const addCategory = (categoryName: string, sort: number) => instance.post(`${apiPrefix}/admin/category`, {
     name: categoryName,
     sort,
     type: 1
@@ -25,7 +25,7 @@ export const addCategory = (categoryName: string, sort: number) => instance.post
  * @param id 分类id
  * @returns 
  */
-export const deleteCategory = (id: number) => instance.delete(`/api/admin/category?id=${id}`);
+export const deleteCategory = (id: number) => instance.delete(`${apiPrefix}/admin/category?id=${id}`);
 
 /**
  * 启用或禁用分类
@@ -33,7 +33,7 @@ export const deleteCategory = (id: number) => instance.delete(`/api/admin/catego
  * @param status 分类状态
  * @returns 
  */
-export const enableOrDiableCategory = (id: string, status: number) => instance.post(`/api/admin/category/status/${status}?id=${id}`);
+export const enableOrDiableCategory = (id: string, status: number) => instance.post(`${apiPrefix}/admin/category/status/${status}?id=${id}`);
 
 /**
  * 设置分类
@@ -42,7 +42,7 @@ export const enableOrDiableCategory = (id: string, status: number) => instance.p
  * @param sort 分类排序
  * @returns 
  */
-export const setCategory = (id: string, name: string, sort: number) => instance.put("/api/admin/category", {
+export const setCategory = (id: string, name: string, sort: number) => instance.put(`${apiPrefix}/admin/category`, {
     id,
     name,
     sort,

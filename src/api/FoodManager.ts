@@ -1,4 +1,4 @@
-import { instance } from ".";
+import { apiPrefix, instance } from ".";
 import { AddFoodOption, EditFoodOption, GetFoodOption } from "../types/page/FoodManager";
 
 /**
@@ -6,20 +6,20 @@ import { AddFoodOption, EditFoodOption, GetFoodOption } from "../types/page/Food
  * @param option 
  * @returns 
  */
-export const getFood = (option: GetFoodOption) => instance.get(`/api/admin/dish/page?categoryId=${option.categoryId}&name=${option.name}&page=${option.page}&pageSize=${option.pageSize}&status=${option.status}`);
+export const getFood = (option: GetFoodOption) => instance.get(`${apiPrefix}/admin/dish/page?categoryId=${option.categoryId}&name=${option.name}&page=${option.page}&pageSize=${option.pageSize}&status=${option.status}`);
 
 /**
  * 获取所有分类
  * @returns 
  */
-export const getAllCategory = () => instance.get(`/api/admin/category/page?name=&page=1&pageSize=10000&type=`);
+export const getAllCategory = () => instance.get(`${apiPrefix}/admin/category/page?name=&page=1&pageSize=10000&type=`);
 
 /**
  * 批量删除菜品
  * @param ids 需要批量删除的菜品的id组成的字符串
  * @returns 
  */
-export const batchDeleteFood = (ids: string) => instance.delete(`/api/admin/dish?ids=${ids}`);
+export const batchDeleteFood = (ids: string) => instance.delete(`${apiPrefix}/admin/dish?ids=${ids}`);
 
 /**
  * 启售、停售
@@ -27,7 +27,7 @@ export const batchDeleteFood = (ids: string) => instance.delete(`/api/admin/dish
  * @param id 
  * @returns 
  */
-export const setStatus = (status: number, id: number) => instance.post(`/api/admin/dish/status/${status}`, {
+export const setStatus = (status: number, id: number) => instance.post(`${apiPrefix}/admin/dish/status/${status}`, {
     id
 });
 
@@ -36,7 +36,7 @@ export const setStatus = (status: number, id: number) => instance.post(`/api/adm
  * @param file 文件数据
  * @returns 
  */
-export const uploadFile = (file: File) => instance.post(`/api/admin/common/upload`, {
+export const uploadFile = (file: File) => instance.post(`${apiPrefix}/admin/common/upload`, {
     file
 }, {
     headers: {
@@ -49,7 +49,7 @@ export const uploadFile = (file: File) => instance.post(`/api/admin/common/uploa
  * @param option 
  * @returns 
  */
-export const addFood = (option: AddFoodOption) => instance.post(`/api/admin/dish`, {
+export const addFood = (option: AddFoodOption) => instance.post(`${apiPrefix}/admin/dish`, {
     categoryId: option.categoryId,
     description: option.description,
     image: option.image,
@@ -63,7 +63,7 @@ export const addFood = (option: AddFoodOption) => instance.post(`/api/admin/dish
  * @param option 菜品参数
  * @returns 
  */
-export const editFood = (option: EditFoodOption) => instance.put(`/api/admin/dish`, {
+export const editFood = (option: EditFoodOption) => instance.put(`${apiPrefix}/admin/dish`, {
     categoryId: option.categoryId,
     description: option.description,
     image: option.image,

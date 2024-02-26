@@ -53,6 +53,7 @@ const router = createRouter({
 })
 
 // 鉴权用户是否登录，没有登录就跳转到Login页面，登录了就给他进入他想进入的页面
+// @ts-ignore
 router.beforeEach((to, from, next) => {
     const userInfo = useUserInfo();
     if(to.name !== 'Login' && !userInfo.token) {

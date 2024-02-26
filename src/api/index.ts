@@ -2,10 +2,14 @@ import axios from "axios"
 import { useUserInfo } from "../stores/Login";
 import { useLogout } from "../hooks/LoginHook"
 
+export const baseUrl = import.meta.env.MODE === 'development' ? "" : "http://110.41.166.41:8080";
+export const apiPrefix = import.meta.env.MODE === 'development' ? "/api" : "";
+
 // 获取用户信息存储库，用于设置axios每次请求带上token请求头
 const useUserInfoInstance = useUserInfo();
 
 const instance = axios.create({
+    baseURL: baseUrl,
     timeout: 10000,
 });
 
