@@ -33,7 +33,6 @@
             <template #content>
                 <div class="content-container">
                     <Sheet class="sheet-container" :pinto="false" :table-data="tableData" height="500px">
-                        <el-table-column prop="id" label="分类ID" />
                         <el-table-column prop="name" label="分类名称" />
                         <el-table-column prop="sort" sortable label="排序" />
                         <el-table-column prop="status" label="状态">

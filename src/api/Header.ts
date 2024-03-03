@@ -67,3 +67,11 @@ export const editPrintOrderDevice = (option: {
  * @returns 
  */
 export const queryShopHistoryMessage = (shopId: number) => instance.get(`${apiPrefix}/admin/shopMessage/list?shopId=${shopId}`);
+
+/**
+ * 保存店铺头像和名字
+ * @param name 名字
+ * @param image 头像
+ * @returns 
+ */
+export const saveShopAvatarAndName = (name: string, image: string) => instance.put(`${apiPrefix}/admin/shop/info?name=${name}&image=${image}`);

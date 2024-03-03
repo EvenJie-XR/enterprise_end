@@ -11,10 +11,12 @@
 
         <template #default>
             <div class="popover-content-container">
+                <el-button text type="primary" @click="onEditAvatarAndNameClick">修改资料</el-button>
                 <el-button text type="danger" @click="onLogoutBtnClick">退出登录</el-button>
             </div>
         </template>
     </el-popover>
+    <EditAvatarAndName v-model="editAvatarAndNameVisible" @saved="onEditAvatarAndNameDialogSaved" />
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue';
@@ -22,29 +24,45 @@ import { getShopInfo } from '../../api/Header';
 import { logout } from "../../api/Login"
 import { useLogout } from "../../hooks/LoginHook"
 import { useShopInfo } from '../../stores/Shop';
+import EditAvatarAndName from '../header/EditAvatarAndName.vue';
 
 const name = ref('');
 const avatarImg = ref('');
 const useShopInfoInstance = useShopInfo();
-// 获取店铺信息
-getShopInfo().then((res) => {
-    if(res.data.code) { // code == 1 获取成功
-        const data = res.data.data;
-        name.value = data.name;
-        avatarImg.value = data.shopImage;
-        // 全局存储店铺信息
-        useShopInfoInstance.setShopInfo({
-            id: data.id,
-            name: data.name,
-            avatarImg: data.shopImage
-        })
-    }
-})
+const updateShopInfo = () => {
+    // 获取店铺信息
+    getShopInfo().then((res) => {
+        if(res.data.code) { // code == 1 获取成功
+            const data = res.data.data;
+            name.value = data.name;
+            avatarImg.value = data.shopImage;
+            // 全局存储店铺信息
+            useShopInfoInstance.setShopInfo({
+                id: data.id,
+                name: data.name,
+                avatarImg: data.shopImage
+            })
+        }
+    })
+}
+updateShopInfo();
 const onLogoutBtnClick = () => {
     logout().then(() => {
         const useLogoutInstance = useLogout();
         useLogoutInstance.logout();
     })
+}
+// 编辑资料对话框visible
+const editAvatarAndNameVisible = ref(false);
+/**
+ * 编辑资料按钮click
+ */
+const onEditAvatarAndNameClick = () => {
+    editAvatarAndNameVisible.value = true;
+}
+const onEditAvatarAndNameDialogSaved = () => {
+    editAvatarAndNameVisible.value = false;
+    updateShopInfo();
 }
 </script>
 
@@ -75,5 +93,9 @@ const onLogoutBtnClick = () => {
 .popover-content-container {
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    .el-button+.el-button {
+        margin-left: 0px;
+    }
 }
 </style>

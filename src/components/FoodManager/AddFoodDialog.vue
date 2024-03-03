@@ -72,7 +72,6 @@ const form = ref({
 const rules = reactive<FormRules<typeof form>>({
     name: [{ required: true, trigger: 'blur', message: "名字不能为空" }],
     category: [{ required: true, trigger: 'blur', message: "分类不能为空" }],
-    description: [{ required: true, trigger: 'blur', message: "描述不能为空" }],
     price: [{ required: true, trigger: 'blur', message: "价格不能为空" }],
     status: [{ required: true, trigger: 'blur', message: "状态不能为空" }],
     image: [{ required: true, trigger: 'blur', message: "图片不能为空" }],
