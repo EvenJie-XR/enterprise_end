@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useUserInfo } from "../stores/Login";
 import { useLogout } from "../hooks/LoginHook"
+import { ElMessage } from "element-plus";
 
 export const baseUrl = import.meta.env.MODE === 'development' ? "" : "http://110.41.166.41:8081";
 export const apiPrefix = import.meta.env.MODE === 'development' ? "/api" : "";
@@ -33,10 +34,16 @@ instance.interceptors.response.use(
         return response;
     },
     error => {
+        // 退出登录操作
+        const useLogoutInstance = useLogout();
         // 在请求失败时进行处理
         if (error.response && error.response.status === 401) { // 如果请求失败的状态码是401说明token失效了，需要打回登录界面重新登录
-            // 退出登录操作
-            const useLogoutInstance = useLogout();
+            useLogoutInstance.logout();
+        } else if (error.response && error.response.status === 403) { // 当前账号没有绑定商家
+            ElMessage({
+                message: "账号信息审核中，如有疑问联系管理员",
+                type: "error"
+            });
             useLogoutInstance.logout();
         }
         return Promise.reject(error);

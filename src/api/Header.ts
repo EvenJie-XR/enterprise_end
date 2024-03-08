@@ -75,3 +75,8 @@ export const queryShopHistoryMessage = (shopId: number) => instance.get(`${apiPr
  * @returns 
  */
 export const saveShopAvatarAndName = (name: string, image: string) => instance.put(`${apiPrefix}/admin/shop/info?name=${name}&image=${image}`);
+
+export const editPassword = (newPassword: string, oldPassword: string) => instance.put(`${apiPrefix}/admin/employee/editPassword`, {
+    newPassword,
+    oldPassword
+})
