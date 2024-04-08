@@ -13,6 +13,20 @@
                 <el-input v-model="form.description" :autosize="{ minRows: 2, maxRows: 4 }" type="textarea"
                     placeholder="请输入菜品描述..." />
             </el-form-item>
+            <el-form-item label="口味做法配置:" prop="price">
+                <div class="taste-list-contain">
+                    <div class="taste-item">
+                        <div class="taste-name">
+                            <span class="key">做法名称</span>
+                            <el-input v-model="form.description" class="value" placeholder="请输入做法名称..." />
+                        </div>
+                        <div class="taste-value">
+                            <span class="key"></span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </el-form-item>
             <el-form-item label="菜品价格:" prop="price">
                 <el-input-number v-model="form.price" :min="0" />
             </el-form-item>
