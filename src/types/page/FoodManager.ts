@@ -16,7 +16,15 @@ export type AddFoodOption = {
     image: string,
     name: string,
     price: number,
-    status: number
+    status: number,
+    flavors: { // 口味
+        name: string, // 口味名称
+        value: string, // 口味值数组的json字符串
+    }[],
+    specifications: {
+        name: string,
+        value: string // 规格值数组的json字符串
+    }[]
 }
 
 // 新增菜品参数
@@ -27,5 +35,13 @@ export type EditFoodOption = {
     name: string,
     price: number,
     status: number,
-    id: number
+    id: number,
+    flavors: { // 口味
+        name: string, // 口味名称
+        value: string, // 口味值数组的json字符串
+    }[],
+    specifications: {
+        name: string,
+        value: string // 规格值数组的json字符串
+    }[]
 }

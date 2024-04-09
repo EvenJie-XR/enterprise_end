@@ -55,7 +55,9 @@ export const addFood = (option: AddFoodOption) => instance.post(`${apiPrefix}/ad
     image: option.image,
     name: option.name,
     price: option.price,
-    status: option.status
+    status: option.status,
+    flavors: option.flavors,
+    specifications: option.specifications
 })
 
 /**
@@ -70,5 +72,7 @@ export const editFood = (option: EditFoodOption) => instance.put(`${apiPrefix}/a
     name: option.name,
     price: option.price,
     status: option.status,
-    id: option.id
+    id: option.id,
+    flavors: option.flavors,
+    specifications: option.specifications
 })

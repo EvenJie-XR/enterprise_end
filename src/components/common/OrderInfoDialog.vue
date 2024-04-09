@@ -54,14 +54,14 @@
                     菜品
                 </div>
                 <div class="dishes-list">
-                    <div class="dishes-item" v-for="dishes in detail?.orderDetailList" :key="dishes.id">
-                        <div class="name-left">
-                            {{ dishes.name }}
-                        </div>
-                        <div class="amount-right">
-                            <span>*{{ dishes.number }}</span>
-                            <span>{{ dishes.amount }}元</span>
-                        </div>
+                    <div class="dishes-item">
+                        <el-table :data="detail?.orderDetailList" style="width: 100%">
+                            <el-table-column prop="name" label="菜品名称" />
+                            <el-table-column prop="dishSpecification" label="份量" />
+                            <el-table-column prop="dishFlavor" label="口味" />
+                            <el-table-column prop="number" label="数量" />
+                            <el-table-column prop="amount" label="价格" />
+                        </el-table>
                     </div>
                 </div>
                 <hr/>
@@ -140,6 +140,11 @@ const detailOrderInfo = computed(() => {
                 width: 40%;
                 display: flex;
                 justify-content: space-between;
+            }
+            .name-left {
+                span {
+                    margin-right: 20px;
+                }
             }
         }
     }
