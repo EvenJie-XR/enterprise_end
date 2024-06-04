@@ -73,6 +73,16 @@
                                             <span>规格名称:</span>
                                             <el-input v-model="specificationValue.valueName" placeholder="请输入规格名称..." class="input" />
                                         </div>
+                                        <!-- 规格项值-线下价格 -->
+                                        <div class="valueList-item-price-container">
+                                            <span>规格线下价格:</span>
+                                            <el-input-number v-model="specificationValue.offlinePrice" placeholder="请输入规格线下价格..." class="input" />
+                                        </div>
+                                        <!-- 规格项值-原价 -->
+                                        <div class="valueList-item-price-container">
+                                            <span>规格原价:</span>
+                                            <el-input-number v-model="specificationValue.originalPrice" placeholder="请输入规格原价..." class="input" />
+                                        </div>
                                         <!-- 规格项值-价格 -->
                                         <div class="valueList-item-price-container">
                                             <span>规格价格:</span>
@@ -87,6 +97,14 @@
                             </div>
                         </el-scrollbar>
                     </div>
+                </el-form-item>
+                注：线下价格，菜品原价 = 菜品价格 (默认)
+                <br><br>
+                <el-form-item label="线下价格:" prop="offlinePrice">
+                    <el-input-number v-model="form.offlinePrice" :min="0" />
+                </el-form-item>
+                <el-form-item label="菜品原价:" prop="originalPrice">
+                    <el-input-number v-model="form.originalPrice" :min="0" />
                 </el-form-item>
                 <el-form-item label="菜品价格:" prop="price">
                     <el-input-number v-model="form.price" :min="0" />
@@ -143,6 +161,8 @@ const form = ref<{
     category: string,
     description: string,
     name: string,
+    offlinePrice: number | null,
+    originalPrice: number | null,
     price: number,
     status: number,
     image: string,
@@ -154,6 +174,8 @@ const form = ref<{
         specificationName: string, // 规格名字
         specificationValueList: {  // 规格值
             valueName: string, // 规格值名字
+            offlinePrice: number, // 规格线下价格
+            originalPrice: number, // 规格原价
             price: number // 规格价格
         }[]
     }[]
@@ -161,6 +183,8 @@ const form = ref<{
     category: "",
     description: "",
     name: "",
+    offlinePrice: null,
+    originalPrice: null,
     price: 0,
     status: 1,
     image: "",
@@ -242,6 +266,8 @@ const resetForm = () => {
         category: "",
         description: "",
         name: "",
+        offlinePrice: null,
+        originalPrice: null,
         price: 0,
         status: 1,
         image: "",
@@ -259,6 +285,8 @@ const onAddBtnClick = () => {
                     value: JSON.stringify(specification.specificationValueList.map(value => {
                         return {
                             value: value.valueName,
+                            offlinePrice: value.offlinePrice,
+                            originalPrice: value.originalPrice,
                             price: value.price
                         }
                     }))
@@ -276,6 +304,8 @@ const onAddBtnClick = () => {
                 description: form.value.description,
                 image: form.value.image,
                 name: form.value.name,
+                offlinePrice: form.value.offlinePrice,
+                originalPrice: form.value.originalPrice,
                 price: form.value.price,
                 status: form.value.status,
                 specifications: specificationList,
@@ -360,6 +390,8 @@ const onAddSpecificationBtnClick = () => {
         specificationValueList: [
             {
                 valueName: '',
+                offlinePrice: 0,
+                originalPrice: 0,
                 price: 0,
             }
         ]
@@ -371,10 +403,14 @@ const onAddSpecificationBtnClick = () => {
  */
 const onAddSpecificationValueInSpecificationItemBtnClick = (valueList: {  // 规格值
     valueName: string, // 规格值名字
+    offlinePrice: number, // 规格线下价格
+    originalPrice: number, // 规格原价
     price: number // 规格价格
 }[]) => {
     valueList.push({
         valueName: '',
+        offlinePrice: 0,
+        originalPrice: 0,
         price: 0
     })
 }
@@ -385,6 +421,8 @@ const onAddSpecificationValueInSpecificationItemBtnClick = (valueList: {  // 规
  */
 const onDeleteSpecificationValueBtnClick = (valueList: {  // 规格值
     valueName: string, // 规格值名字
+    offlinePrice: number, // 规格线下价格
+    originalPrice: number, // 规格原价
     price: number // 规格价格
 }[], index: number) => {
     valueList.splice(index, 1);
@@ -398,6 +436,8 @@ const onDeleteSpecificationBtnClick = (specificationList: { // 规格列表
         specificationName: string, // 规格名字
         specificationValueList: {  // 规格值
             valueName: string, // 规格值名字
+            offlinePrice: number, // 规格线下价格
+            originalPrice: number, // 规格原价
             price: number // 规格价格
         }[]
 }[], index: number) => {

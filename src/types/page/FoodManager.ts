@@ -15,6 +15,8 @@ export type AddFoodOption = {
     description: string,
     image: string,
     name: string,
+    offlinePrice: number | null,
+    originalPrice: number | null,
     price: number,
     status: number,
     flavors: { // 口味
@@ -33,6 +35,8 @@ export type EditFoodOption = {
     description: string,
     image: string,
     name: string,
+    offlinePrice: number | null,
+    originalPrice: number | null,
     price: number,
     status: number,
     id: number,
