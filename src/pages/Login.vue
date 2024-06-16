@@ -62,7 +62,7 @@ const formRules: Ref<FormRules<typeof form>> = ref({
 const formSubmiting = ref(false);
 // 表单校验
 const formValidate = (formEl: FormInstance) => {
-
+// @ts-ignore
     return formEl.validate((valid: any) => valid ? true : false);
 
 }
@@ -84,7 +84,7 @@ const handleLoginSuccess = (res: AxiosResponse<any, any>) => {
     });
     // 登录成功跳转到工作台页面
     router.push({
-        name: "Home"
+        name: "Shop"
     })
 }
 // 登录
