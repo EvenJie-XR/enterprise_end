@@ -43,11 +43,16 @@ const router = createRouter({
                 },
             ]
         },
-        
+
         {
             path: "/Login",
             name: "Login",
             component: () => import("../pages/Login.vue")
+        },
+        {
+            path: "/Shop",
+            name: "Shop",
+            component: () => import("../pages/ShopChoice.vue")
         }
     ]
 })
@@ -56,11 +61,11 @@ const router = createRouter({
 // @ts-ignore
 router.beforeEach((to, from, next) => {
     const userInfo = useUserInfo();
-    if(to.name !== 'Login' && !userInfo.token) {
+    if (to.name !== 'Login' && !userInfo.token) {
         next({
             name: "Login"
         })
-    }else {
+    } else {
         next();
     }
 })
