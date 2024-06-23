@@ -99,6 +99,16 @@
                                 {{ categoryIdAndCategoryMap[row.categoryId] }}
                             </template>
                         </el-table-column>
+                        <el-table-column prop="offlinePrice" label="线下价格">
+                            <template #default="{row}">
+                                ￥{{ row.offlinePrice }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="originalPrice" label="原价">
+                            <template #default="{row}">
+                                ￥{{ row.originalPrice }}
+                            </template>
+                        </el-table-column>
                         <el-table-column prop="price" label="售价">
                             <template #default="{row}">
                                 ￥{{ row.price }}
@@ -116,6 +126,7 @@
                                 <el-button text class="control-btn" type="danger" @click="onDeleteSalesBtnClick(row)">删除</el-button>
                                 <el-button text class="control-btn" type="danger" v-if="row.status" @click="onHaltTheSalesBtnClick(row)">停售</el-button>
                                 <el-button text class="control-btn" type="success" v-if="!row.status" @click="onStartSalesBtnClick(row)">启售</el-button>
+                                <el-button text class="control-btn" type="success" @click="onCopyFoodBtnClick(row)">复制</el-button>
                             </template>
                         </el-table-column>
                     </Sheet>
@@ -165,6 +176,7 @@ const {
     newFoodBtnClick,
     editFoodDialogVisible,
     editFoodBtnClick,
+    onCopyFoodBtnClick,
     currentRow,
 
     currentPage,

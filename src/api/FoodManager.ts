@@ -54,6 +54,8 @@ export const addFood = (option: AddFoodOption) => instance.post(`${apiPrefix}/ad
     description: option.description,
     image: option.image,
     name: option.name,
+    offlinePrice: option.offlinePrice,
+    originalPrice: option.originalPrice,
     price: option.price,
     status: option.status,
     flavors: option.flavors,
@@ -70,9 +72,18 @@ export const editFood = (option: EditFoodOption) => instance.put(`${apiPrefix}/a
     description: option.description,
     image: option.image,
     name: option.name,
+    offlinePrice: option.offlinePrice,
+    originalPrice: option.originalPrice,
     price: option.price,
     status: option.status,
     id: option.id,
     flavors: option.flavors,
     specifications: option.specifications
 })
+
+/**
+ * 复制菜品
+ * @param id 菜品id
+ * @returns 
+ */
+export const copyFood = (id: number) => instance.post(`${apiPrefix}/admin/dish/copy/${id}`)

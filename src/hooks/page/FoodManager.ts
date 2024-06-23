@@ -1,5 +1,5 @@
 import { Ref, computed, ref } from "vue";
-import { batchDeleteFood, getAllCategory, getFood, setStatus } from "../../api/FoodManager";
+import { batchDeleteFood, getAllCategory, getFood, setStatus,copyFood } from "../../api/FoodManager";
 import { ElMessage } from "element-plus";
 
 /**
@@ -295,6 +295,26 @@ export const useFoodManager = () => {
     }
 
     /**
+     * 复制菜品按钮click
+     */
+    const onCopyFoodBtnClick = (row: any) => {
+        copyFood(row.id).then((res) => {
+            if(res.data.code) {
+                ElMessage({
+                    message: "复制成功",
+                    type: "success"
+                })
+                updateTableData();
+            }else {
+                ElMessage({
+                    message: "复制失败",
+                    type: "error"
+                })
+            }
+        })
+    }
+
+    /**
      * 新增菜品成功事件
      */
     const onAddFoodAdded = () => {
@@ -334,6 +354,7 @@ export const useFoodManager = () => {
         newFoodBtnClick,
         editFoodDialogVisible,
         editFoodBtnClick,
+        onCopyFoodBtnClick,
         currentRow,
 
         // 分页部分
