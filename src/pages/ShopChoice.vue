@@ -6,22 +6,20 @@
         </div>
 
         <div class="shop-container">
-            <el-card class="shop-item" v-for="(shop, index) in ShopList" :key="index">
-                <img :src="shop.shopImage" style="width: 100%; height: 100px; border-radius: 100%;"
+            <el-card class="shop-item" style="background-color: transparent;box-shadow: none; border: none;"
+                v-for="(shop, index) in ShopList" :key="index">
+                <img :src="shop.shopImage" style="width: 100px; height: 100px; border-radius: 50%;cursor:pointer"
                     @click="goInShop(shop.id)">
-                <template #footer>
-                    <div
-                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
-                        <span>{{ shop.name }}</span>
-                        <el-popconfirm width="220" confirm-button-text="我确定" cancel-button-text="关闭"
-                            :icon="WarningFilled" icon-color="#626AEF" title="你确定解绑吗?"
-                            @confirm="HandelRemoveShop(shop.id, index)">
-                            <template #reference>
-                                <span style="text-decoration: underline;color: #4BB9A3;cursor: pointer;">解除绑定</span>
-                            </template>
-                        </el-popconfirm>
-                    </div>
-                </template>
+                <div
+                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; margin-top: 10px;">
+                    <span>{{ shop.name }}</span>
+                    <el-popconfirm width="220" confirm-button-text="我确定" cancel-button-text="关闭" :icon="WarningFilled"
+                        icon-color="#626AEF" title="你确定解绑吗?" @confirm="HandelRemoveShop(shop.id, index)">
+                        <template #reference>
+                            <span style="text-decoration: underline;color: #4BB9A3;cursor: pointer;">解除绑定</span>
+                        </template>
+                    </el-popconfirm>
+                </div>
             </el-card>
         </div>
     </div>
