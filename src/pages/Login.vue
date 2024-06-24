@@ -71,10 +71,31 @@ const formValidate = (formEl: FormInstance) => {
 
 }
 /**
- * 处理登录成功
+ * 处理账号密码登录成功
  * @param res 
  */
 const handleLoginSuccess = (res: AxiosResponse<any, any>) => {
+    // 获取到UserInfo的pinia存储库
+    const useUserInfoInstance = useUserInfo();
+    // 设置登录成功之后的用户信息
+    const userInfo = res.data.data;
+    // 存储登录成功之后的用户信息到UserInfo存储库
+    useUserInfoInstance.setUserInfo(userInfo)
+    // 提示登录成功
+    ElMessage({
+        message: "登录成功",
+        type: "success"
+    });
+    // 登录成功跳转到工作台页面
+    router.push({
+        name: "Home"
+    })
+}
+/**
+ * 处理微信登录成功
+ * @param res 
+ */
+const handleWechatLoginSuccess = (res: AxiosResponse<any, any>) => {
     // 获取到UserInfo的pinia存储库
     const useUserInfoInstance = useUserInfo();
     // 设置登录成功之后的用户信息
@@ -210,7 +231,7 @@ const handleWeChatLogin = () => {
                 if (data.needPassword) {
                     needSetPasswordDialogVisible.value = true;
                 } else {
-                    handleLoginSuccess(curWeChatLoginRes);
+                    handleWechatLoginSuccess(curWeChatLoginRes);
                 }
             } else {
                 ElMessage({
