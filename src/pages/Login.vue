@@ -41,7 +41,7 @@
 <script lang="ts" setup>
 import { Ref, reactive, ref } from "vue";
 import SVGIcon from "../components/common/SVGIcon.vue"
-import { login, setNeedPassword, weChatLogin, weChatLoginTemp } from "../api/Login"
+import { login, setNeedPassword, weChatLogin } from "../api/Login"
 import { ElMessage, FormRules, type FormInstance } from 'element-plus'
 import { useUserInfo } from "../stores/Login"
 import { router } from "../routers/index"
@@ -88,7 +88,7 @@ const handleLoginSuccess = (res: AxiosResponse<any, any>) => {
     });
     // 登录成功跳转到工作台页面
     router.push({
-        name: "Shop"
+        name: "Home"
     })
 }
 /**

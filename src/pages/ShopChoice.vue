@@ -78,7 +78,8 @@ const openShopEntryDialog = () => {
     /**
      * 子组件暴露的方法
      */
-    shopSettleDialog.value.openDialog();
+    //@ts-ignore
+    shopSettleDialog?.value.openDialog();
 }
 </script>
 <style lang="scss" scoped>

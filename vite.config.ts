@@ -20,18 +20,18 @@ export default defineConfig({
       symbolId: "icon-[dir]-[name]",
     }),
   ],
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://43.136.114.250:8081',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-      '/mock': {
-        target: 'https://mock.apifox.com/m1/3616952-0-default',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/mock/, ''),
-      }
-    },
-  }
+  // server: {
+  //   proxy: {
+  //     '/api': {
+  //       target: 'http://43.136.114.250:8081',
+  //       changeOrigin: true,
+  //       rewrite: (path) => path.replace(/^\/api/, ''),
+  //     },
+  //     '/mock': {
+  //       target: 'https://mock.apifox.com/m1/3616952-0-default',
+  //       changeOrigin: true,
+  //       rewrite: (path) => path.replace(/^\/mock/, ''),
+  //     }
+  //   },
+  // }
 })

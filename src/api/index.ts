@@ -3,7 +3,8 @@ import { useUserInfo } from "../stores/Login";
 import { useLogout } from "../hooks/LoginHook"
 import { ElMessage } from "element-plus";
 
-export const baseUrl = import.meta.env.MODE === 'development' ? "" : "http://43.136.114.250:8081";
+// export const baseUrl = import.meta.env.MODE === 'development' ? "" : "http://43.136.114.250:8081";
+export const baseUrl = import.meta.env.VITE_API_BASE_URL;
 export const apiPrefix = import.meta.env.MODE === 'development' ? "/api" : "";
 
 // 获取用户信息存储库，用于设置axios每次请求带上token请求头
@@ -18,6 +19,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
     (config) => {
         // 在发送请求之前做些什么
+        console.log("baseurl:", baseUrl, import.meta.env.VITE_API_BASE_URL);
         config.headers['token'] = useUserInfoInstance.token; // 添加 token 头部，如果不通过这个方法去获取token，那么这个token是不会实时变化的
         return config;
     },
