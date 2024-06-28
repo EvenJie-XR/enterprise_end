@@ -36,11 +36,13 @@ export const addShop = (account: string, password: string) => instance.put(`${ap
  *  phone:手机号
  * }
  */
-export const newShop = (option: ShopApplicationType) => instance.put(`${apiPrefix}/admin/employee/bind`, {
+export const newShop = (option: ShopApplicationType) => instance.post(`${apiPrefix}/admin/employee/add`, {
     name: option.name,
     shopImage: option.shopImage,
     certificate: option.certificate,
     legalPersonName: option.legalPersonName,
     idNumber: option.idNumber,
     phone: option.phone,
+    account: option.account,
+    password: option.password
 });

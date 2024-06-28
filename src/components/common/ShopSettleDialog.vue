@@ -136,7 +136,7 @@ defineExpose({
 /**
  * 提交表单
  */
-const upLoadImgUrl = ref("http://43.136.114.250:8081/admin/common/upload");
+const upLoadImgUrl = ref(import.meta.env.VITE_API_BASE_URL + "admin/common/upload");
 const Header = {
     token: useUserInfo().token
 }
@@ -160,7 +160,7 @@ const handleSubmit = () => {
         console.log("提交成功", res)
         ElMessage({
             message: res.data.msg,
-            type: "error"
+            type: "success"
         })
     }).catch(err => {
         console.log("提交失败", err)

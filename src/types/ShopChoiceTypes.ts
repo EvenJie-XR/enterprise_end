@@ -5,6 +5,8 @@ export type ShopApplicationType = {
     legalPersonName: string,
     idNumber: string,
     phone: string,
+    account: string,
+    password: string
 }
 export type ShopDetailType = {
     account: string,
