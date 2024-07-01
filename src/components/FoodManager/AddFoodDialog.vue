@@ -197,7 +197,6 @@ const rules = reactive<FormRules<typeof form>>({
     price: [{ required: true, trigger: 'blur', message: "价格不能为空" }],
     status: [{ required: true, trigger: 'blur', message: "状态不能为空" }],
     image: [{ required: true, trigger: 'blur', message: "图片不能为空" }],
-    specificationList: [{ required: true, trigger: 'blur', message: "规格列表不能为空" }],
 })
 // 分类选项list
 const categoryOptions: Ref<{ id: number, name: string }[]> = ref([]);
